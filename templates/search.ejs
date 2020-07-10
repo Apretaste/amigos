@@ -13,7 +13,8 @@
             <div class="action grey lighten-2 green-text">
                 <% if(result.relation == 'friend'){ %>
                     <a href="#!">
-                        <i class="material-icons red-text" onclick="deleteModalOpen('<%= result.id %>', '<%= result.username %>')">
+                        <i class="material-icons red-text"
+                           onclick="deleteModalOpen('<%= result.id %>', '<%= result.username %>')">
                             delete
                         </i>
                     </a>
@@ -25,7 +26,8 @@
                     </a>
                 <% }else if(result.relation == 'waitingForMe') { %>
                     <a href="#!">
-                        <i class="material-icons red-text" onclick="rejectModalOpen('<%= result.id %>', '<%= result.username %>')">
+                        <i class="material-icons red-text"
+                           onclick="rejectModalOpen('<%= result.id %>', '<%= result.username %>')">
                             delete
                         </i>
                     </a>
@@ -37,7 +39,8 @@
                     </a>
                 <% }else if(result.relation == 'none') { %>
                     <a href="#!">
-                        <i class="material-icons red-text" onclick="blockModalOpen('<%= result.id %>', '<%= result.username %>')">
+                        <i class="material-icons red-text"
+                           onclick="blockModalOpen('<%= result.id %>', '<%= result.username %>')">
                             block
                         </i>
                     </a>
@@ -52,6 +55,13 @@
         </div>
     </div>
 <% }) %>
+
+<div class="fixed-action-btn">
+    <a class="btn-floating btn-large waves-effect waves-light green" href="#!"
+       onclick="apretaste.back()">
+        <i class="material-icons">arrow_back</i>
+    </a>
+</div>
 
 <% if(search.length == 0){ %>
     <p class="middle-center center grey-text">Sin resultados.</p>
