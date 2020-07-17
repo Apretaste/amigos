@@ -8,6 +8,7 @@ var currentUser = null;
 
 function openSearchModal() {
 	M.Modal.getInstance($('#searchModal')).open();
+	$('#search').focus();
 }
 
 function deleteModalOpen(id, username) {

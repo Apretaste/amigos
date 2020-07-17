@@ -127,6 +127,8 @@
 
 .card.user-card .content {
     padding: 5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .card.user-card .action {

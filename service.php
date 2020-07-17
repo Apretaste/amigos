@@ -38,67 +38,6 @@ class Service
 			$friend->avatarColor = $friend->avatarColor ?? 'verde';
 		}
 
-		$response->setLayout('amigos.ejs');
-		$response->setTemplate('main.ejs', ['friends' => $friends, 'title' => 'Amigos']);
-	}
-
-	/**
-	 * Search friends by username
-	 *
-	 * @param Request $request
-	 * @param Response $response
-	 * @throws Alert
-	 * @author ricardo
-	 */
-	public function _buscar(Request $request, Response $response)
-	{
-		$username = $request->input->data->username ?? false;
-		$results = [];
-		if ($username) {
-			$username = Database::escape(str_replace('@', '', $username));
-			// only this few columns are needed
-			$exactUser = Database::queryCache("SELECT id, username, gender, avatar, avatarColor, online FROM person WHERE username='$username' LIMIT 1");
-			if (!empty($exactUser)) {
-				$results[] = $exactUser[0];
-			} else {
-				$results = Database::queryCache("SELECT id, username, gender, avatar, avatarColor, online FROM person WHERE username LIKE('%$username%') LIMIT 10");
-			}
-
-			foreach ($results as $result) {
-				// get the person's avatar
-				$result->avatar = $result->avatar ?? ($result->gender === 'F' ? 'chica' : 'hombre');
-
-				// get the person's avatar color
-				$result->avatarColor = $result->avatarColor ?? 'verde';
-
-				$result->relation = 'none';
-
-				// TODO optimize to query only once to know the state
-				if ($request->person->isFriendOf($result->id)) $result->relation = 'friend';
-				else {
-					$waitingRelation = $request->person->getWaitingRelation($result->id);
-					if ($waitingRelation) {
-						$result->relation = $waitingRelation->user1 == $request->person->id ? 'waiting' : 'waitingForMe';
-					}
-				}
-			}
-		}
-
-		$response->setCache('hour');
-		$response->setLayout('amigos.ejs');
-		$response->setTemplate('search.ejs', ['results' => $results, 'search' => $username]);
-	}
-
-	/**
-	 *
-	 *
-	 * @param Request $request
-	 * @param Response $response
-	 * @throws Alert
-	 * @author ricardo@apretaste.org
-	 */
-	public function _esperando(Request $request, Response $response)
-	{
 		$waiting = $request->person->getFriendRequests();
 
 		foreach ($waiting as &$result) {
@@ -112,9 +51,43 @@ class Service
 			$result->avatarColor = $result->avatarColor ?? 'verde';
 		}
 
-		// send data to the view
-		$response->setLayout('amigos.ejs');
-		$response->setTemplate('waiting.ejs', ['waiting' => $waiting, 'title' => 'Esperando']);
+		$content = ['friends' => $friends, 'waiting' => $waiting];
+
+		$response->setTemplate('main.ejs', $content);
+	}
+
+	/**
+	 * Search friends by username
+	 *
+	 * @param Request $request
+	 * @param Response $response
+	 * @throws Alert
+	 * @author ricardo
+	 */
+	public function _buscar(Request $request, Response $response)
+	{
+		$username = $request->input->data->username ?? false;
+		$user = Person::find($username);
+		if ($user) {
+			$request->person->requestFriend($user->id);
+			$content = [
+				"header" => 'Solicitúd enviada',
+				"text" => "Has enviado una solicitud de amistad a @{$user->username}",
+				'icon' => "person_add",
+				'btn' => ['command' => 'amigos', 'caption' => 'Inicio']
+			];
+		} else {
+			$username = str_replace('@', '', $username);
+			$content = [
+				"header" => 'Lo sentimos',
+				"text" => "El usuario @$username no fue encontrado.",
+				'icon' => "sentiment_very_dissatisfied",
+				'btn' => ['command' => 'amigos', 'caption' => 'Inicio']
+			];
+		}
+
+		$response->setCache('hour');
+		$response->setTemplate('message.ejs', $content);
 	}
 
 	/**
