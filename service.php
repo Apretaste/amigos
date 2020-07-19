@@ -71,10 +71,10 @@ class Service
 		if ($user) {
 			$request->person->requestFriend($user->id);
 			$content = [
-				"header" => 'Solicitúd enviada',
+				"header" => 'Solicitud enviada',
 				"text" => "Has enviado una solicitud de amistad a @{$user->username}",
 				'icon' => "person_add",
-				'btn' => ['command' => 'amigos', 'caption' => 'Inicio']
+				'btn' => ['command' => 'amigos', 'caption' => 'Ver amigos']
 			];
 		} else {
 			$username = str_replace('@', '', $username);
@@ -82,7 +82,7 @@ class Service
 				"header" => 'Lo sentimos',
 				"text" => "El usuario @$username no fue encontrado.",
 				'icon' => "sentiment_very_dissatisfied",
-				'btn' => ['command' => 'amigos', 'caption' => 'Inicio']
+				'btn' => ['command' => 'amigos', 'caption' => 'Ver amigos']
 			];
 		}
 
