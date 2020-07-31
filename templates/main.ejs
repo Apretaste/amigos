@@ -1,21 +1,21 @@
 <div class="row" style="margin-top: 10px">
-    <% if(friends.length > 0 && waiting.length > 0){ %>
-        <div class="col s12">
-            <div class="tags">
-                <div class="chip tiny">
-                    <i class="fa fa-user-alt"></i>
-                    <%= friends.length %> <%= friends.length > 1 ? 'amigos' : 'amigo' %>
-                </div>
+    <div class="col s12">
+        <div class="tags">
+            <div class="chip tiny">
+                <i class="fa fa-user-alt"></i>
+                <%= friends.length %> <%= friends.length > 1 ? 'amigos' : 'amigo' %>
+            </div>
+            <% if(waiting.length > 0){ %>
                 <div class="chip tiny">
                     <i class="fa fa-user-clock"></i>
                     <%= waiting.length %> <%= waiting.length > 1 ? 'peticiones' : 'petición' %>
                 </div>
-            </div>
+            <% } %>
         </div>
-    <% } %>
+    </div>
 
     <% waiting.forEach(function(result){ %>
-        <div class="col s4 m2">
+        <div class="col s4 m2" id="<%= result.id %>">
             <div class="card user-card center-align">
                 <div class="content" onclick="openProfile('<%= result.id %>')">
                     <div class="person-avatar circle" face="<%= result.avatar %>" color="<%= result.avatarColor %>"
@@ -151,7 +151,7 @@
         <p>¿Cancelar solicitud de amistad para <b class="username">@username</b>?</p>
     </div>
     <div class="modal-footer">
-        <a href="#!" class="modal-close waves-effect waves-light btn-flat">Atras</a>
+        <a href="#!" class="modal-close waves-effect waves-light btn-flat">Atrás</a>
         <a onclick="rejectFriend('Solicitud cancelada')" class="modal-close waves-effect waves-red btn-flat red-text"
            style="font-weight: 500">Cancelar solicitud</a>
     </div>
