@@ -349,3 +349,7 @@ ul.chat li {
 #home-menu {
     padding-top: 20px;
 }
+
+.bottom-sheet {
+    max-height: 60% !important;
+}

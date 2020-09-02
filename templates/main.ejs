@@ -3,12 +3,16 @@
         <div class="tags">
             <div class="chip tiny">
                 <i class="fa fa-user-alt"></i>
-                <%= friends.length %> <%= friends.length > 1 ? 'amigos' : 'amigo' %>
+                <span id="friendsCounter">
+                    <%= friends.length %> <%= friends.length > 1 ? 'amigos' : 'amigo' %>
+                </span>
             </div>
             <% if(waiting.length > 0){ %>
                 <div class="chip tiny">
                     <i class="fa fa-user-clock"></i>
-                    <%= waiting.length %> <%= waiting.length > 1 ? 'peticiones' : 'petición' %>
+                    <span id="waitingCounter">
+                        <%= waiting.length %> <%= waiting.length > 1 ? 'peticiones' : 'petición' %>
+                    </span>
                 </div>
             <% } %>
         </div>
@@ -51,7 +55,7 @@
 
     <% friends.forEach(function(friend){ %>
         <div class="col s4 m2">
-            <div class="card user-card center-align">
+            <div class="card user-card center-align" id="<%= friend.id %>">
                 <div class="content" onclick="openProfile('<%= friend.id %>')">
                     <div class="person-avatar circle" face="<%= friend.avatar %>" color="<%= friend.avatarColor %>"
                          size="40" online="<%= friend.online %>"></div>

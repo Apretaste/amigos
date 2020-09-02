@@ -5,6 +5,7 @@ $(function () {
 });
 
 var currentUser = null;
+var currentUsername = null;
 
 function openSearchModal() {
     M.Modal.getInstance($('#searchModal')).open();
@@ -66,10 +67,53 @@ function addFriend(message) {
         data: {id: currentUser},
         redirect: false,
         callback: {
-            name: 'showToast',
+            name: 'addFriendCallback',
             data: message
         }
     });
+}
+
+function addFriendCallback(message) {
+    showToast(message);
+    friends.push(1);
+
+    var friendsCounter = $('#friendsCounter');
+
+    if (friendsCounter.length > 0) {
+        friendsCounter.html(friends.length + ' ' + (friends.length > 1 ? 'amigos' : 'amigo'));
+    } else {
+        $('.tags').append('<div class="chip tiny">\n' +
+            '    <i class="fa fa-user-alt"></i>\n' +
+            '    <span id="friendsCounter">\n' +
+            '    </span>\n' +
+            '</div>');
+
+        friendsCounter = $('#friendsCounter');
+        friendsCounter.html(friends.length + ' ' + (friends.length > 1 ? 'amigos' : 'amigo'));
+    }
+
+    var waitingCounter = $('#waitingCounter');
+    if (waiting.length === 1) {
+        waitingCounter.parent().remove();
+    } else {
+        waiting.pop();
+        waitingCounter.html(waiting.length + ' ' + (waiting.length > 1 ? 'peticiones' : 'petición'));
+    }
+
+    $('#' + currentUser + ' .action').html(
+        '<a href="#!">\n' +
+        '    <i class="material-icons red-text"\n' +
+        '       onclick="deleteModalOpen(\'' + currentUser + '\', \'' + currentUsername + '\')">\n' +
+        '        do_not_disturb_alt\n' +
+        '    </i>\n' +
+        '</a>\n' +
+        '<a href="#!">\n' +
+        '    <i class="material-icons"\n' +
+        '       onclick="apretaste.send({command: \'chat\', data: {userId: \'' + currentUser + '\'}})">\n' +
+        '        chat\n' +
+        '    </i>\n' +
+        '</a>');
+
 }
 
 function deleteFriend() {
@@ -78,10 +122,21 @@ function deleteFriend() {
         data: {id: currentUser},
         redirect: false,
         callback: {
-            name: 'showToast',
-            data: 'Amigo eliminado'
+            name: 'deleteFriendCallback',
         }
     });
+}
+
+function deleteFriendCallback() {
+    showToast('Amigo eliminado');
+    $('#' + currentUser).remove();
+    var friendsCounter = $('#friendsCounter');
+    if (friends.length === 1) {
+        friendsCounter.parent().remove();
+    } else {
+        friends.pop();
+        friendsCounter.html(friends.length + ' ' + (friends.length > 1 ? 'amigos' : 'amigo'));
+    }
 }
 
 function rejectFriend(message) {
@@ -117,10 +172,19 @@ function showToast(text) {
 }
 
 function setCurrentUsername(username) {
+    currentUsername = username;
     $('.username').html('@' + username);
 }
 
 function rejectFriendCallback(data) {
     showToast(data.message);
     $('#' + data.id).remove();
+
+    var waitingCounter = $('#waitingCounter');
+    if (waiting.length === 1) {
+        waitingCounter.parent().remove();
+    } else {
+        waiting.pop();
+        waitingCounter.html(waiting.length + ' ' + (waiting.length > 1 ? 'peticiones' : 'petición'));
+    }
 }
