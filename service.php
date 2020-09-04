@@ -29,6 +29,8 @@ class Service
 
 		foreach ($friends as &$friend) {
 			$user = Database::queryFirst("SELECT id, username, gender, avatar, avatarColor, online FROM person WHERE id='{$friend}' LIMIT 1");
+			if (empty($user)) continue;
+			
 			$friend = $user;
 
 			// get the person's avatar
