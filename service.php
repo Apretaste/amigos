@@ -1,17 +1,11 @@
 <?php
 
 use Apretaste\Challenges;
-use Apretaste\Chats;
-use Apretaste\Level;
-use Apretaste\Notifications;
 use Apretaste\Person;
 use Apretaste\Request;
 use Apretaste\Response;
-use Framework\Core;
 use Framework\Alert;
 use Framework\Database;
-use Framework\Images;
-use Framework\Utils;
 
 class Service
 {
@@ -29,7 +23,9 @@ class Service
 
 		foreach ($friends as &$friend) {
 			$user = Database::queryFirst("SELECT id, username, gender, avatar, avatarColor, online FROM person WHERE id='{$friend}' LIMIT 1");
-			if (empty($user)) continue;
+			if (empty($user)) {
+				continue;
+			}
 			
 			$friend = $user;
 
@@ -44,7 +40,7 @@ class Service
 
 		foreach ($waiting as &$result) {
 			$user = Database::queryFirst("SELECT id, username, gender, avatar, avatarColor, online FROM person WHERE id='{$result->id}' LIMIT 1");
-			$result = (object)array_merge((array)$user, (array)$result);
+			$result = (object) array_merge((array) $user, (array) $result);
 
 			// get the person's avatar
 			$result->avatar = $result->avatar ?? ($result->gender === 'F' ? 'chica' : 'hombre');
@@ -93,7 +89,7 @@ class Service
 	}
 
 	/**
-	 *
+	 * Invite a friend to connect
 	 *
 	 * @param Request $request
 	 * @param Response $response
@@ -104,6 +100,7 @@ class Service
 	{
 		$userId = $request->input->data->id ?? false;
 		if ($userId) {
+			Challenges::complete('invite-friend', $request->person->id);
 			$request->person->requestFriend($userId);
 		}
 	}
