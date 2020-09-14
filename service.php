@@ -100,7 +100,7 @@ class Service
 	{
 		$userId = $request->input->data->id ?? false;
 		if ($userId) {
-			Challenges::complete('invite-friend', $request->person->id);
+			Challenges::complete('request-friend', $request->person->id);
 			$request->person->requestFriend($userId);
 		}
 	}
