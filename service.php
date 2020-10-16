@@ -100,7 +100,13 @@ class Service
 	{
 		$userId = $request->input->data->id ?? false;
 		if ($userId) {
-			Challenges::complete('request-friend', $request->person->id);
+
+			// check previous interactions
+			$interactions = Person::getInteractions($request->person->id, $userId, null, false);
+			if (empty($interactions)) {
+				Challenges::complete('request-friend', $request->person->id);
+			}
+
 			$request->person->requestFriend($userId);
 		}
 	}
