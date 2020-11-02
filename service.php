@@ -26,7 +26,7 @@ class Service
 			if (empty($user)) {
 				continue;
 			}
-			
+
 			$friend = $user;
 
 			// get the person's avatar
@@ -36,11 +36,15 @@ class Service
 			$friend->avatarColor = $friend->avatarColor ?? 'verde';
 		}
 
+		usort($friends, function ($a, $b) {
+			return strcmp($a->username, $b->username);
+		});
+
 		$waiting = $request->person->getFriendRequests();
 
 		foreach ($waiting as &$result) {
 			$user = Database::queryFirst("SELECT id, username, gender, avatar, avatarColor, online FROM person WHERE id='{$result->id}' LIMIT 1");
-			$result = (object) array_merge((array) $user, (array) $result);
+			$result = (object)array_merge((array)$user, (array)$result);
 
 			// get the person's avatar
 			$result->avatar = $result->avatar ?? ($result->gender === 'F' ? 'chica' : 'hombre');
@@ -49,7 +53,28 @@ class Service
 			$result->avatarColor = $result->avatarColor ?? 'verde';
 		}
 
-		$content = ['friends' => $friends, 'waiting' => $waiting];
+		usort($waiting, function ($a, $b) {
+			return strcmp($a->username, $b->username);
+		});
+
+		$blocked = $request->person->getPeopleBlocked();
+
+		foreach ($blocked as &$result) {
+			$user = Database::queryFirst("SELECT id, username, gender, avatar, avatarColor, online FROM person WHERE id='{$result->id}' LIMIT 1");
+			$result = (object)array_merge((array)$user, (array)$result);
+
+			// get the person's avatar
+			$result->avatar = $result->avatar ?? ($result->gender === 'F' ? 'chica' : 'hombre');
+
+			// get the person's avatar color
+			$result->avatarColor = $result->avatarColor ?? 'verde';
+		}
+
+		usort($blocked, function ($a, $b) {
+			return strcmp($a->username, $b->username);
+		});
+
+		$content = ['friends' => $friends, 'waiting' => $waiting, 'blocked' => $blocked];
 
 		$response->setTemplate('main.ejs', $content);
 	}
@@ -156,6 +181,22 @@ class Service
 		$userId = $request->input->data->id ?? false;
 		if ($userId) {
 			$request->person->blockPerson($userId);
+		}
+	}
+
+	/**
+	 *
+	 *
+	 * @param Request $request
+	 * @param Response $response
+	 * @throws Alert
+	 * @author ricardo@apretaste.org
+	 */
+	public function _desbloquear(Request $request, Response $response)
+	{
+		$userId = $request->input->data->id ?? false;
+		if ($userId) {
+			$request->person->unblockPerson($userId);
 		}
 	}
 }
