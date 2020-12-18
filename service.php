@@ -19,6 +19,8 @@ class Service
 	 */
 	public function _main(Request $request, Response $response)
 	{
+		$isCreator = $request->person->isContentCreator;
+
 		$friends = $request->person->getFriends();
 
 		foreach ($friends as &$friend) {
@@ -40,22 +42,25 @@ class Service
 			return strcmp($a->username, $b->username);
 		});
 
-		$waiting = $request->person->getFriendRequests();
+		$waiting = [];
+		if (!$isCreator) {
+			$waiting = $request->person->getFriendRequests();
 
-		foreach ($waiting as &$result) {
-			$user = Database::queryFirst("SELECT id, username, gender, avatar, avatarColor, online FROM person WHERE id='{$result->id}' LIMIT 1");
-			$result = (object)array_merge((array)$user, (array)$result);
+			foreach ($waiting as &$result) {
+				$user = Database::queryFirst("SELECT id, username, gender, avatar, avatarColor, online FROM person WHERE id='{$result->id}' LIMIT 1");
+				$result = (object)array_merge((array)$user, (array)$result);
 
-			// get the person's avatar
-			$result->avatar = $result->avatar ?? ($result->gender === 'F' ? 'chica' : 'hombre');
+				// get the person's avatar
+				$result->avatar = $result->avatar ?? ($result->gender === 'F' ? 'chica' : 'hombre');
 
-			// get the person's avatar color
-			$result->avatarColor = $result->avatarColor ?? 'verde';
+				// get the person's avatar color
+				$result->avatarColor = $result->avatarColor ?? 'verde';
+			}
+
+			usort($waiting, function ($a, $b) {
+				return strcmp($a->username, $b->username);
+			});
 		}
-
-		usort($waiting, function ($a, $b) {
-			return strcmp($a->username, $b->username);
-		});
 
 		$blocked = $request->person->getPeopleBlocked();
 
@@ -74,9 +79,15 @@ class Service
 			return strcmp($a->username, $b->username);
 		});
 
-		$content = ['friends' => $friends, 'waiting' => $waiting, 'blocked' => $blocked];
+		$content = [
+			'friends' => $friends,
+			'waiting' => $waiting,
+			'blocked' => $blocked,
+		];
 
-		$response->setTemplate('main.ejs', $content);
+		$template = $isCreator ? 'main-cdc.ejs' : 'main.ejs';
+
+		$response->setTemplate($template, $content);
 	}
 
 	/**
