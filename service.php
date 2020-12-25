@@ -19,7 +19,7 @@ class Service
 	 */
 	public function _main(Request $request, Response $response)
 	{
-		$isCreator = $request->person->isContentCreator;
+		$isInfluencer = $request->person->isInfluencer;
 
 		$friends = $request->person->getFriends();
 
@@ -43,7 +43,7 @@ class Service
 		});
 
 		$waiting = [];
-		if (!$isCreator) {
+		if (!$isInfluencer) {
 			$waiting = $request->person->getFriendRequests();
 
 			foreach ($waiting as &$result) {
@@ -85,9 +85,62 @@ class Service
 			'blocked' => $blocked,
 		];
 
-		$template = $isCreator ? 'main-cdc.ejs' : 'main.ejs';
-
+		$template = $isInfluencer ? 'main-influencer.ejs' : 'main.ejs';
 		$response->setTemplate($template, $content);
+	}
+
+	/**
+	 * user friends list
+	 *
+	 * @param Request $request
+	 * @param Response $response
+	 * @throws Alert
+	 * @author ricardo
+	 */
+	public function _listar(Request $request, Response $response)
+	{
+		$userId = $request->input->data->id ?? false;
+		$searched = Person::find($userId);
+
+		if (!$searched) {
+			$content = [
+				"header" => 'Lo sentimos',
+				"text" => "El usuario no fue encontrado.",
+				'icon' => "sentiment_very_dissatisfied",
+				'btn' => ['command' => 'amigos', 'caption' => 'Ver amigos']
+			];
+
+			$response->setCache('hour');
+			$response->setTemplate('message.ejs', $content);
+		}
+
+		$friends = $searched->getFriends();
+
+		foreach ($friends as &$friend) {
+			$user = Database::queryFirst("SELECT id, username, gender, avatar, avatarColor, online FROM person WHERE id='{$friend}' LIMIT 1");
+			if (empty($user)) {
+				continue;
+			}
+
+			$friend = $user;
+
+			// get the person's avatar
+			$friend->avatar = $friend->avatar ?? ($friend->gender === 'F' ? 'chica' : 'hombre');
+
+			// get the person's avatar color
+			$friend->avatarColor = $friend->avatarColor ?? 'verde';
+		}
+
+		usort($friends, function ($a, $b) {
+			return strcmp($a->username, $b->username);
+		});
+
+		$content = [
+			'friends' => $friends,
+			'isInfluencer' => $searched->isInfluencer
+		];
+
+		$response->setTemplate('listar.ejs', $content);
 	}
 
 	/**
