@@ -29,7 +29,12 @@
         <div class="col s4 m2 waiting" id="<%= result.id %>" data-value="<%= result.username %>">
             <div class="card user-card center-align">
                 <div class="content" onclick="openProfile('<%= result.id %>')">
-                    <div class="person-avatar circle" face="<%= result.avatar %>" color="<%= result.avatarColor %>"
+                    <div class="person-avatar circle"
+                    <% if(result.is_influencer == true){ %>
+                         creator_image="{{APP_SERVICE_PATH}}/images/<%= result.username %>.png"
+                         state="gold"
+                            <% } %>
+                         face="<%= result.avatar %>" color="<%= result.avatarColor %>"
                          size="40" online="<%= result.online %>"></div>
                     <span class="<%= result.gender %>">@<%= result.username %></span>
                 </div>

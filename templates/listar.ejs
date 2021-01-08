@@ -4,7 +4,7 @@
             <div class="chip tiny">
                 <i class="fa fa-user-alt"></i>
                 <span id="friendsCounter">
-					<%= friends.length %> <%= friends.length > 1 ? 'seguidores' : 'seguidor' %>
+					<%= friends.length %> amigos
 				</span>
             </div>
 
@@ -21,7 +21,12 @@
         <div class="col s4 m2 friend" id="<%= friend.id %>" data-value="<%= friend.username %>">
             <div class="card user-card center-align" id="<%= friend.id %>">
                 <div class="content" onclick="openProfile('<%= friend.id %>')">
-                    <div class="person-avatar circle" face="<%= friend.avatar %>" color="<%= friend.avatarColor %>"
+                    <div class="person-avatar circle"
+                    <% if(friend.is_influencer == true){ %>
+                         creator_image="{{APP_SERVICE_PATH}}/images/<%= friend.username %>.png"
+                         state="gold"
+                            <% } %>
+                         face="<%= friend.avatar %>" color="<%= friend.avatarColor %>"
                          size="40" online="<%= friend.online %>"></div>
                     <span class="<%= friend.gender %>">@<%= friend.username %></span>
                 </div>
@@ -38,7 +43,7 @@
     <% }) %>
 
     <% if(friends.length == 0){ %>
-        <p class="middle-center center grey-text">Aún no tiene seguidores.</p>
+        <p class="middle-center center grey-text">Aún no tiene amigos.</p>
     <% } %>
 </div>
 
