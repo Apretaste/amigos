@@ -1,9 +1,10 @@
 <?php
 
-use Apretaste\Challenges;
 use Apretaste\Person;
 use Apretaste\Request;
 use Apretaste\Response;
+use Apretaste\Tutorial;
+use Apretaste\Challenges;
 use Framework\Alert;
 use Framework\Database;
 
@@ -38,9 +39,9 @@ class Service
 			$friend->avatarColor = $friend->avatarColor ?? 'verde';
 		}
 
-		usort($friends, function ($a, $b) {
-			return strcmp($a->username, $b->username);
-		});
+		// usort($friends, function ($a, $b) {
+		// 	return strcmp($a->username, $b->username);
+		// });
 
 		$waiting = [];
 		if (!$isInfluencer) {
@@ -153,17 +154,32 @@ class Service
 	 */
 	public function _buscar(Request $request, Response $response)
 	{
+		// get the friend from username
 		$username = $request->input->data->username ?? false;
 		$user = Person::find($username);
+
+		// if username exist ...
 		if ($user) {
+			// send request
 			$request->person->requestFriend($user->id);
+
+			// complete tutorial
+			if($user->username == 'apretin') {
+				Tutorial::complete($request->person->id, 'add_apretin');
+			}
+
+			// prepare response
 			$content = [
 				"header" => 'Solicitud enviada',
 				"text" => "Has enviado una solicitud de amistad a @{$user->username}",
 				'icon' => "person_add",
 				'btn' => ['command' => 'amigos', 'caption' => 'Ver amigos']
 			];
-		} else {
+		} 
+
+		// if username do not exist ...
+		else {
+			// prepare response
 			$username = str_replace('@', '', $username);
 			$content = [
 				"header" => 'Lo sentimos',
@@ -173,6 +189,7 @@ class Service
 			];
 		}
 
+		// send data to the view
 		$response->setCache('hour');
 		$response->setTemplate('message.ejs', $content);
 	}
@@ -187,15 +204,22 @@ class Service
 	 */
 	public function _agregar(Request $request, Response $response)
 	{
+		// get the user to add
 		$userId = $request->input->data->id ?? false;
-		if ($userId) {
 
+		if ($userId) {
 			// check previous interactions
 			$interactions = Person::getInteractions($request->person->id, $userId, null, false);
+
+			// if no previous friend request, complete challenge
 			if (empty($interactions)) {
 				Challenges::complete('request-friend', $request->person->id);
 			}
 
+			// complete tutorial
+			Tutorial::complete($request->person->id, 'find_friends');
+
+			// create the friend request
 			$request->person->requestFriend($userId);
 		}
 	}
