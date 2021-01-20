@@ -49,6 +49,8 @@ class Service
 
 			foreach ($waiting as &$result) {
 				$user = Database::queryFirst("SELECT id, username, gender, avatar, avatarColor, online FROM person WHERE id='{$result->id}' LIMIT 1");
+				if (!$user) continue;
+				
 				$result = (object)array_merge((array)$user, (array)$result);
 
 				// get the person's avatar
@@ -164,7 +166,7 @@ class Service
 			$request->person->requestFriend($user->id);
 
 			// complete tutorial
-			if($user->username == 'apretin') {
+			if ($user->username == 'apretin') {
 				Tutorial::complete($request->person->id, 'add_apretin');
 			}
 
@@ -175,9 +177,7 @@ class Service
 				'icon' => "person_add",
 				'btn' => ['command' => 'amigos', 'caption' => 'Ver amigos']
 			];
-		} 
-
-		// if username do not exist ...
+		} // if username do not exist ...
 		else {
 			// prepare response
 			$username = str_replace('@', '', $username);
