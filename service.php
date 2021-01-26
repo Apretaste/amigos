@@ -47,10 +47,13 @@ class Service
 		if (!$isInfluencer) {
 			$waiting = $request->person->getFriendRequests();
 
-			foreach ($waiting as &$result) {
+			foreach ($waiting as $key => &$result) {
 				$user = Database::queryFirst("SELECT id, username, gender, avatar, avatarColor, online FROM person WHERE id='{$result->id}' LIMIT 1");
-				if (!$user) continue;
-				
+				if (!$user) {
+					unset($waiting[$key]);
+					continue;
+				};
+
 				$result = (object)array_merge((array)$user, (array)$result);
 
 				// get the person's avatar
