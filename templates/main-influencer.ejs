@@ -76,6 +76,30 @@
 
 <div class="bottom-space"></div>
 
+
+<!-- SEARCH -->
+<div class="fixed-action-btn">
+    <a class="btn-floating btn-large waves-effect waves-light green" href="#!"
+       onclick="openSearchModal()">
+        <i class="material-icons">person_add</i>
+    </a>
+</div>
+
+<!-- MODALS -->
+<div id="searchModal" class="modal bottom-sheet">
+    <div class="modal-content">
+        <p>Inserta un @username para enviarle una solicitud de amistad</p>
+        <div class="input-field">
+            <input type="text" id="search" class="validate">
+            <label for="search">Username</label>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a href="#!" class="modal-close waves-effect waves-light btn-flat">Cerrar</a>
+        <a onclick="searchUser()" class="waves-effect waves-green btn-flat green-text modal-close">Enviar</a>
+    </div>
+</div>
+
 <div id="addFriendModal" class="modal">
     <div class="modal-content">
         <p>¿Agregar a <b class="username">@username</b> a sus amigos?</p>
