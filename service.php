@@ -71,7 +71,7 @@ class Service
 		$blocked = $request->person->getPeopleBlocked();
 
 		foreach ($blocked as &$result) {
-			$user = Database::queryFirst("SELECT id, username, gender, avatar, avatarColor, online FROM person WHERE id='{$result->id}' LIMIT 1");
+			$user = Database::queryFirst("SELECT id, username, gender, avatar, avatarColor, online FROM person WHERE id={$result} LIMIT 1");
 			$result = (object)array_merge((array)$user, (array)$result);
 
 			// get the person's avatar
