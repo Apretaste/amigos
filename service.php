@@ -228,8 +228,6 @@ class Service
 	}
 
 	/**
-	 *
-	 *
 	 * @param Request $request
 	 * @param Response $response
 	 * @throws Alert
