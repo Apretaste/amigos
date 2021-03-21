@@ -92,6 +92,7 @@ class Service
 		];
 
 		$template = $isInfluencer ? 'main-influencer.ejs' : 'main.ejs';
+		$response->setCache('hour');
 		$response->setTemplate($template, $content);
 	}
 
