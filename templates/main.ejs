@@ -26,7 +26,7 @@
     </div>
 
     <% waiting.forEach(function(result){ %>
-        <div class="col s4 m2 waiting" id="<%= result.id %>" data-value="<%= result.username %>">
+        <div class="col s4 m3 waiting" id="<%= result.id %>" data-value="<%= result.username %>">
             <div class="card user-card center-align">
                 <div class="content" onclick="openProfile('<%= result.id %>')">
                     <div class="person-avatar circle"
@@ -66,7 +66,7 @@
     <% }) %>
 
     <% friends.forEach(function(friend){ %>
-        <div class="col s4 m2 friend" id="<%= friend.id %>" data-value="<%= friend.username %>">
+        <div class="col s4 m3 friend" id="<%= friend.id %>" data-value="<%= friend.username %>">
             <div class="card user-card center-align" id="<%= friend.id %>">
                 <div class="content" onclick="openProfile('<%= friend.id %>')">
                     <div class="person-avatar circle"
@@ -79,15 +79,14 @@
                     <span class="<%= friend.gender %>">@<%= friend.username %></span>
                 </div>
                 <div class="action grey lighten-2 green-text">
-                    <a href="#!">
-                        <i class="fa fa-ban red-text"
+                    <a>
+                        <i class="fa fa-lg fa-ban red-text"
                            onclick="deleteModalOpen('<%= friend.id %>', '<%= friend.username %>')">
                         </i>
                     </a>
-                    <a href="#!">
-                        <i class="material-icons"
+                    <a>
+                        <i class="fa fa-lg fa-comments"
                            onclick="apretaste.send({command: 'chat', data: {userId: '<%= friend.id %>'}})">
-                            chat
                         </i>
                     </a>
                 </div>
@@ -96,7 +95,7 @@
     <% }) %>
 
     <% blocked.forEach(function(result){ %>
-        <div class="col s4 m2 blocked" id="<%= result.id %>" data-value="<%= result.username %>">
+        <div class="col s4 m3 blocked" id="<%= result.id %>" data-value="<%= result.username %>">
             <div class="card user-card center-align">
                 <div class="content" onclick="openProfile('<%= result.id %>')">
                     <div class="person-avatar circle" face="<%= result.avatar %>" color="<%= result.avatarColor %>"
