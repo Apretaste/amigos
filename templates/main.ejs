@@ -41,22 +41,20 @@
                 <div class="action grey lighten-2 green-text">
                     <% if(result.type == 'waitingForMe') { %>
                         <a href="#!">
-                            <i class="fa-times red-text"
+                            <i class="fa fa-lg fa-times red-text"
                                onclick="rejectModalOpen('<%= result.id %>', '<%= result.username %>')">
-                                delete
                             </i>
                         </a>
                         <a href="#!">
-                            <i class="material-icons"
+                            <i class="fa fa-lg fa-user-plus green-text"
                                onclick="acceptModalOpen('<%= result.id %>', '<%= result.username %>')">
                                 person_add
                             </i>
                         </a>
                     <% }else if(result.type == 'waiting') { %>
                         <a href="#!">
-                            <i class="material-icons red-text"
+                            <i class="fa fa-lg fa-times red-text"
                                onclick="cancelRequestModalOpen('<%= result.id %>', '<%= result.username %>')">
-                                delete
                             </i>
                         </a>
                     <% } %>
