@@ -39,9 +39,9 @@ class Service
 			$friend->avatarColor = $friend->avatarColor ?? 'verde';
 		}
 
-		// usort($friends, function ($a, $b) {
-		// 	return strcmp($a->username, $b->username);
-		// });
+		usort($friends, function ($a, $b) {
+			return strcmp($a->username, $b->username);
+		});
 
 		$waiting = [];
 		if (!$isInfluencer) {
@@ -285,8 +285,21 @@ class Service
 	public function _desbloquear(Request $request, Response $response)
 	{
 		$userId = $request->input->data->id ?? false;
+		$username = $request->input->data->username;
 		if ($userId) {
 			$request->person->unblockPerson($userId);
 		}
+
+		// prepare response
+		$content = [
+			"header" => 'Usuario desbloqueado',
+			"text" => "Has desbloqueado a @$username",
+			'icon' => "lock_open",
+			'btn' => ['command' => 'amigos', 'caption' => 'Ver amigos']
+		];
+
+		// send data to the view
+		$response->setCache('hour');
+		$response->setTemplate('message.ejs', $content);
 	}
 }

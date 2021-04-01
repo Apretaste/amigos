@@ -172,12 +172,8 @@ function blockUser() {
 function unblockUser() {
 	apretaste.send({
 		command: 'amigos desbloquear',
-		data: {id: currentUser},
-		redirect: false,
-		callback: {
-			name: 'showToast',
-			data: 'Usuario desbloqueado'
-		}
+		data: {id: currentUser, username: currentUsername},
+		redirect: true
 	});
 }
 
