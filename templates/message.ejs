@@ -4,6 +4,6 @@
         <i class="material-icons large"><%= icon %></i>
         <p><%= text %></p>
         <a class="waves-effect waves-light btn" href="#!"
-           onclick="apretaste.send({'command':'<%= btn['command'] %>'})"><%= btn['caption'] %></a>
+           onclick="apretaste.send({command:'<%= btn['command'] %>', useCache: false})"><%= btn['caption'] %></a>
     </div>
 </div>
