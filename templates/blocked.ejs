@@ -43,35 +43,37 @@
     <% } %>
 
     <!-- PAGINATION -->
-    <div>
-        <!-- If not async allowed -->
-        <div class="row" id="paginationFooter" style="display: none;">
-            <div class="col s12 center-align">
-                <ul class="pagination">
-                    <% if(page > 1){ %>
-                        <li class="waves-effect">
-                            <a onclick="previousPage()">
-                                <i class="material-icons">chevron_left</i>
-                            </a>
-                        </li>
-                    <% } %>
-                    <li class="waves-effect"><%= page %> / <%= pages %></li>
-                    <% if(page < pages){ %>
-                        <li class="waves-effect">
-                            <a onclick="nextPage()">
-                                <i class="material-icons">chevron_right</i>
-                            </a>
-                        </li>
-                    <% } %>
-                </ul>
+    <% if(pages > 0){ %>
+        <div class="center-bottom">
+            <!-- If not async allowed -->
+            <div class="row" id="paginationFooter" style="display: none;">
+                <div class="col s12 center-align">
+                    <ul class="pagination">
+                        <% if(page > 1){ %>
+                            <li class="waves-effect">
+                                <a onclick="previousPage()">
+                                    <i class="material-icons">chevron_left</i>
+                                </a>
+                            </li>
+                        <% } %>
+                        <li class="waves-effect"><%= page %> / <%= pages %></li>
+                        <% if(page < pages){ %>
+                            <li class="waves-effect">
+                                <a onclick="nextPage()">
+                                    <i class="material-icons">chevron_right</i>
+                                </a>
+                            </li>
+                        <% } %>
+                    </ul>
+                </div>
             </div>
-        </div>
 
-        <!-- If loading or no more notes -->
-        <p id="loadingText" class="grey-text center" style="display: none;">
-            Cargando mas resultados...
-        </p>
-    </div>
+            <!-- If loading or no more notes -->
+            <p id="loadingText" class="grey-text center" style="display: none;">
+                Cargando más resultados...
+            </p>
+        </div>
+    <% } %>
 </div>
 
 <div class="bottom-space"></div>

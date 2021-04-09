@@ -101,7 +101,8 @@ class Service
 			'waiting' => $waiting,
 			'page' => $page,
 			'pages' => $pages,
-			'title' => 'Solicitudes'
+			'title' => 'Solicitudes',
+			'isInfluencer' => $isInfluencer
 		];
 
 		$response->setCache('hour');

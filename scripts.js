@@ -16,9 +16,9 @@ $(function () {
 			passive: true
 		})
 
-		if (page >= pages) {
+		if (page > pages) {
 			var loadingText = $('#loadingText')
-			loadingText.html('No hay mas resultados');
+			loadingText.html('No hay más resultados');
 			loadingText.show();
 		}
 	} else if (typeof page != "undefined") {
@@ -120,10 +120,10 @@ function loadMoreResultsCallback(content) {
 	loading = false;
 
 	var loadingText = $('#loadingText');
-	if (page < pages) {
+	if (page < pages || pages === 0) {
 		loadingText.hide();
 	} else {
-		loadingText.html('No hay mas resultados');
+		loadingText.html('No hay más resultados');
 	}
 }
 

@@ -359,9 +359,13 @@ ul.chat li {
     max-height: 60% !important;
 }
 
-#paginationFooter {
+.center-bottom {
     position: absolute;
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
+}
+
+#loadingText{
+    margin-bottom: 3rem;
 }
