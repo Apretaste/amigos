@@ -21,11 +21,13 @@ class Service
 	public function _main(Request $request, Response $response)
 	{
 		$isInfluencer = $request->person->isInfluencer;
+		$page = $request->input->data->page ?? 1;
+		$pages = ceil($request->person->getFriendsCount() / 50);
 
-		$friends = $request->person->getFriends();
+		$friends = $request->person->getFriends(false, $page);
 
 		foreach ($friends as &$friend) {
-			$user = Database::queryFirst("SELECT id, username, gender, avatar, avatarColor, online, is_influencer FROM person WHERE id='{$friend}' LIMIT 1");
+			$user = Database::queryFirst("SELECT id, username, gender, avatar, avatarColor, online, is_influencer FROM person WHERE id='{$friend}'");
 			if (empty($user)) {
 				continue;
 			}
@@ -43,9 +45,36 @@ class Service
 			return strcmp($a->username, $b->username);
 		});
 
+		$content = [
+			'friends' => $friends,
+			'page' => $page,
+			'pages' => $pages,
+			'title' => 'Amigos',
+			'isInfluencer' => $isInfluencer
+		];
+
+		$response->setCache('hour');
+		$response->setLayout('amigos.ejs');
+		$response->setTemplate('main.ejs', $content);
+	}
+
+	/**
+	 * user friends list
+	 *
+	 * @param Request $request
+	 * @param Response $response
+	 * @throws Alert
+	 * @author ricardo
+	 */
+	public function _waiting(Request $request, Response $response)
+	{
+		$isInfluencer = $request->person->isInfluencer;
+		$page = $request->input->data->page ?? 1;
+		$pages = ceil($request->person->getFriendRequestsCount());
+
 		$waiting = [];
 		if (!$isInfluencer) {
-			$waiting = $request->person->getFriendRequests();
+			$waiting = $request->person->getFriendRequests(false, $page);
 
 			foreach ($waiting as $key => &$result) {
 				$user = Database::queryFirst("SELECT id, username, gender, avatar, avatarColor, online FROM person WHERE id='{$result->id}' LIMIT 1");
@@ -68,6 +97,32 @@ class Service
 			});
 		}
 
+		$content = [
+			'waiting' => $waiting,
+			'page' => $page,
+			'pages' => $pages,
+			'title' => 'Solicitudes'
+		];
+
+		$response->setCache('hour');
+		$response->setLayout('amigos.ejs');
+		$response->setTemplate('waiting.ejs', $content);
+	}
+
+	/**
+	 * user friends list
+	 *
+	 * @param Request $request
+	 * @param Response $response
+	 * @throws Alert
+	 * @author ricardo
+	 */
+	public function _blocked(Request $request, Response $response)
+	{
+		$isInfluencer = $request->person->isInfluencer;
+		$page = $request->input->data->page ?? 1;
+		$pages = ceil($request->person->getPeopleBlockedCount());
+
 		$blocked = $request->person->getPeopleBlocked();
 
 		foreach ($blocked as &$result) {
@@ -86,14 +141,16 @@ class Service
 		});
 
 		$content = [
-			'friends' => $friends,
-			'waiting' => $waiting,
 			'blocked' => $blocked,
+			'page' => $page,
+			'pages' => $pages,
+			'title' => 'Bloqueados',
+			'isInfluencer' => $isInfluencer
 		];
 
-		$template = $isInfluencer ? 'main-influencer.ejs' : 'main.ejs';
 		$response->setCache('hour');
-		$response->setTemplate($template, $content);
+		$response->setLayout('amigos.ejs');
+		$response->setTemplate('blocked.ejs', $content);
 	}
 
 	/**

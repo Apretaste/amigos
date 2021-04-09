@@ -1,0 +1,36 @@
+<% waiting.forEach(function(result){ %>
+    <div class="col s4 m3 waiting" id="<%= result.id %>" data-value="<%= result.username %>">
+        <div class="card user-card center-align">
+            <div class="content" onclick="openProfile('<%= result.id %>')">
+                <div class="person-avatar circle"
+                <% if(result.is_influencer == true){ %>
+                     creator_image="{{APP_SERVICE_PATH}}/images/<%= result.username %>.png"
+                     state="gold"
+                        <% } %>
+                     face="<%= result.avatar %>" color="<%= result.avatarColor %>"
+                     size="40" online="<%= result.online %>"></div>
+                <span class="<%= result.gender %>">@<%= result.username %></span>
+            </div>
+            <div class="action grey lighten-2 green-text">
+                <% if(result.type == 'waitingForMe') { %>
+                    <a href="#!">
+                        <i class="fa fa-lg fa-times red-text"
+                           onclick="rejectModalOpen('<%= result.id %>', '<%= result.username %>')">
+                        </i>
+                    </a>
+                    <a href="#!">
+                        <i class="fa fa-user-plus green-text"
+                           onclick="acceptModalOpen('<%= result.id %>', '<%= result.username %>')">
+                        </i>
+                    </a>
+                <% }else if(result.type == 'waiting') { %>
+                    <a href="#!">
+                        <i class="fa fa-lg fa-times red-text"
+                           onclick="cancelRequestModalOpen('<%= result.id %>', '<%= result.username %>')">
+                        </i>
+                    </a>
+                <% } %>
+            </div>
+        </div>
+    </div>
+<% }) %>
