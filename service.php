@@ -53,7 +53,6 @@ class Service
 			'isInfluencer' => $isInfluencer
 		];
 
-		$response->setCache('hour');
 		$response->setLayout('amigos.ejs');
 		$response->setTemplate('main.ejs', $content);
 	}
@@ -105,7 +104,6 @@ class Service
 			'isInfluencer' => $isInfluencer
 		];
 
-		$response->setCache('hour');
 		$response->setLayout('amigos.ejs');
 		$response->setTemplate('waiting.ejs', $content);
 	}
@@ -149,7 +147,6 @@ class Service
 			'isInfluencer' => $isInfluencer
 		];
 
-		$response->setCache('hour');
 		$response->setLayout('amigos.ejs');
 		$response->setTemplate('blocked.ejs', $content);
 	}
