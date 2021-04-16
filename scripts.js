@@ -4,10 +4,10 @@ $(function () {
 	$('.modal').modal();
 
 	if (asyncAllowed() && typeof page != "undefined") {
-		document.body.addEventListener('scroll', function () {
-			var scrollTop = document.body.scrollTop;
-			var scrollHeight = document.body.scrollHeight;
-			var clientHeight = document.body.clientHeight;
+		document.addEventListener('scroll', function () {
+			var scrollTop = document.documentElement.scrollTop;
+			var scrollHeight = document.documentElement.scrollHeight;
+			var clientHeight = document.documentElement.clientHeight;
 
 			if (scrollTop + clientHeight >= scrollHeight - 600) {
 				loadMoreAsync();
