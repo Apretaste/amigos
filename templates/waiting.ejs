@@ -2,10 +2,10 @@
     <div class="col s12">
         <div class="tags">
             <div class="chip tiny">
-                <i class="fa fa-user-alt"></i>
-                <span id="friendsCounter">
-					<%= friends.length %> <%= friends.length > 1 ? 'amigos' : 'amigo' %>
-				</span>
+                <i class="fa fa-user-clock"></i>
+                <span id="waitingCounter">
+                    <%= waiting.length %> <%= waiting.length !== 1 ? 'peticiones' : 'petición' %>
+                </span>
             </div>
 
             <span class="chip tiny" onclick="openSearch()">
@@ -18,38 +18,46 @@
     </div>
 
     <div class="results">
-        <% friends.forEach(function(friend){ %>
-            <div class="col s4 m3 friend" id="<%= friend.id %>" data-value="<%= friend.username %>">
-                <div class="card user-card center-align" id="<%= friend.id %>">
-                    <div class="content" onclick="openProfile('<%= friend.id %>')">
+        <% waiting.forEach(function(result){ %>
+            <div class="col s4 m3 waiting" id="<%= result.id %>" data-value="<%= result.username %>">
+                <div class="card user-card center-align">
+                    <div class="content" onclick="openProfile('<%= result.id %>')">
                         <div class="person-avatar circle"
-                        <% if(friend.is_influencer == true){ %>
-                             creator_image="{{APP_SERVICE_PATH}}/images/<%= friend.username %>.png"
+                        <% if(result.is_influencer == true){ %>
+                             creator_image="{{APP_SERVICE_PATH}}/images/<%= result.username %>.png"
                              state="gold"
                                 <% } %>
-                             face="<%= friend.avatar %>" color="<%= friend.avatarColor %>"
-                             size="40" online="<%= friend.online %>"></div>
-                        <span class="<%= friend.gender %>">@<%= friend.username %></span>
+                             face="<%= result.avatar %>" color="<%= result.avatarColor %>"
+                             size="40" online="<%= result.online %>"></div>
+                        <span class="<%= result.gender %>">@<%= result.username %></span>
                     </div>
-                    <div class="action grey lighten-2">
-                        <a>
-                            <i class="fa fa-lg fa-times red-text"
-                               onclick="deleteModalOpen('<%= friend.id %>', '<%= friend.username %>')">
-                            </i>
-                        </a>
-                        <a>
-                            <i class="fa fa-lg fa-comments green-text"
-                               onclick="apretaste.send({command: 'chat', data: {userId: '<%= friend.id %>'}})">
-                            </i>
-                        </a>
+                    <div class="action grey lighten-2 green-text">
+                        <% if(result.type == 'waitingForMe') { %>
+                            <a href="#!">
+                                <i class="fa fa-lg fa-times red-text"
+                                   onclick="rejectModalOpen('<%= result.id %>', '<%= result.username %>')">
+                                </i>
+                            </a>
+                            <a href="#!">
+                                <i class="fa fa-user-plus green-text"
+                                   onclick="acceptModalOpen('<%= result.id %>', '<%= result.username %>')">
+                                </i>
+                            </a>
+                        <% }else if(result.type == 'waiting') { %>
+                            <a href="#!">
+                                <i class="fa fa-lg fa-times red-text"
+                                   onclick="cancelRequestModalOpen('<%= result.id %>', '<%= result.username %>')">
+                                </i>
+                            </a>
+                        <% } %>
                     </div>
                 </div>
             </div>
         <% }) %>
     </div>
 
-    <% if(friends.length == 0){ %>
-        <p class="middle-center center grey-text">Aún no tiene amigos.</p>
+    <% if(waiting.length == 0){ %>
+        <p class="middle-center center grey-text">No tiene ninguna solicitud pendiente.</p>
     <% } %>
 
     <!-- PAGINATION -->
@@ -95,5 +103,3 @@
         <i class="material-icons">person_add</i>
     </a>
 </div>
-
-<%- '<serviceImgPath data="{{APP_SERVICE_PATH}}/images"></serviceImgPath>' %>

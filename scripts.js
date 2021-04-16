@@ -2,7 +2,160 @@ $(function () {
 	// initialize components
 	$('.tabs').tabs();
 	$('.modal').modal();
+
+	if (asyncAllowed() && typeof page != "undefined") {
+		document.body.addEventListener('scroll', function () {
+			var scrollTop = document.body.scrollTop;
+			var scrollHeight = document.body.scrollHeight;
+			var clientHeight = document.body.clientHeight;
+
+			if (scrollTop + clientHeight >= scrollHeight - 600) {
+				loadMoreAsync();
+			}
+		}, {
+			passive: true
+		})
+
+		if (page > pages) {
+			var loadingText = $('#loadingText')
+			loadingText.html('No hay más resultados');
+			loadingText.show();
+		}
+	} else if (typeof page != "undefined") {
+		$('#paginationFooter').show();
+	}
 });
+
+function asyncAllowed() {
+	return typeof apretaste.connectionMethod != 'undefined' && apretaste.connectionMethod == 'http';
+}
+
+var loading = false;
+
+function loadMoreAsync() {
+	var searchText = cleanUpSpecialChars($('#buscar').val().toLowerCase());
+
+	if (pages > page && !loading && searchText === '') {
+		var command = 'amigos';
+
+		if (title === 'Solicitudes') {
+			command += ' waiting';
+		} else if (title === 'Bloqueados') {
+			command += ' blocked';
+		}
+
+		loading = true;
+		$('#loadingText').show();
+
+		apretaste.send({
+			command: command,
+			data: {page: page + 1},
+			async: true,
+			callback: {name: 'loadMoreCallback'}
+		});
+	}
+}
+
+var currentAsyncResponse = null;
+
+function loadMoreCallback(data, images) {
+	page = data.page;
+	pages = data.pages;
+
+	var template;
+
+	if (title === 'Solicitudes') {
+		data.waiting.forEach(function (user) {
+			waiting.push(user);
+		});
+
+		template = 'Waiting';
+
+		if (data.waiting.length === 0) {
+			pages = page;
+		}
+	} else if (title === 'Bloqueados') {
+		data.blocked.forEach(function (user) {
+			blocked.push(user);
+		});
+
+		template = 'Blocked';
+
+		if (data.blocked.length === 0) {
+			pages = page;
+		}
+	} else { // friends
+		data.friends.forEach(function (user) {
+			friends.push(user);
+		});
+
+		template = 'Friends';
+
+		if (data.friends.length === 0) {
+			pages = page;
+		}
+	}
+
+	currentAsyncResponse = data;
+
+	apretaste.readServiceFile({
+		service: 'amigos',
+		path: 'templates/load' + template + 'Template.ejs',
+		isTemplate: true,
+		callback: 'loadMoreResultsCallback'
+	});
+}
+
+function loadMoreResultsCallback(content) {
+	if (content != null) {
+		var renderedResult = ejs.render(content, currentAsyncResponse);
+		$('.results').append(renderedResult);
+
+		$('.person-avatar').each(function (i, item) {
+			setElementAsAvatar(item);
+		});
+	}
+
+	currentAsyncResponse = null;
+	loading = false;
+
+	var loadingText = $('#loadingText');
+	if (page < pages || pages === 0) {
+		loadingText.hide();
+	} else {
+		loadingText.html('No hay más resultados');
+	}
+}
+
+function nextPage() {
+	var command = 'amigos';
+
+	if (title === 'Solicitudes') {
+		command += ' waiting';
+	} else if (title === 'Bloqueados') {
+		command += ' blocked';
+	}
+
+	apretaste.send({
+		command: command,
+		data: {page: page + 1}
+	});
+}
+
+function previousPage() {
+	var command = 'amigos';
+
+	if (title === 'Solicitudes') {
+		command += ' waiting';
+	} else if (title === 'Bloqueados') {
+		command += ' blocked';
+	}
+
+	apretaste.send({
+		command: command,
+		data: {page: page - 1}
+	});
+}
 
 var currentUser = null;
 var currentUsername = null;
@@ -81,45 +234,13 @@ function addFriend(message) {
 
 function addFriendCallback(message) {
 	showToast(message);
-	friends.push(1);
-
-	var friendsCounter = $('#friendsCounter');
-
-	if (friendsCounter.length > 0) {
-		friendsCounter.html(friends.length + ' ' + (friends.length > 1 ? 'amigos' : 'amigo'));
-	} else {
-		$('.tags').append('<div class="chip tiny">\n' +
-			'    <i class="fa fa-user-alt"></i>\n' +
-			'    <span id="friendsCounter">\n' +
-			'    </span>\n' +
-			'</div>');
-
-		friendsCounter = $('#friendsCounter');
-		friendsCounter.html(friends.length + ' ' + (friends.length > 1 ? 'amigos' : 'amigo'));
-	}
 
 	var waitingCounter = $('#waitingCounter');
-	if (waiting.length === 1) {
-		waitingCounter.parent().remove();
-	} else {
-		waiting.pop();
-		waitingCounter.html(waiting.length + ' ' + (waiting.length > 1 ? 'peticiones' : 'petición'));
-	}
+	waiting.pop();
+	waitingCounter.html(waiting.length + ' ' + (waiting.length > 1 ? 'peticiones' : 'petición'));
 
-	$('#' + currentUser + ' .action').html(
-		'<a href="#!">\n' +
-		'    <i class="material-icons red-text"\n' +
-		'       onclick="deleteModalOpen(\'' + currentUser + '\', \'' + currentUsername + '\')">\n' +
-		'        do_not_disturb_alt\n' +
-		'    </i>\n' +
-		'</a>\n' +
-		'<a href="#!">\n' +
-		'    <i class="material-icons"\n' +
-		'       onclick="apretaste.send({command: \'chat\', data: {userId: \'' + currentUser + '\'}})">\n' +
-		'        chat\n' +
-		'    </i>\n' +
-		'</a>');
 
+	$('#' + currentUser).remove();
 }
 
 function deleteFriend() {
@@ -136,13 +257,11 @@ function deleteFriend() {
 function deleteFriendCallback() {
 	showToast('Amigo eliminado');
 	$('#' + currentUser).remove();
+
 	var friendsCounter = $('#friendsCounter');
-	if (friends.length === 1) {
-		friendsCounter.parent().remove();
-	} else {
-		friends.pop();
-		friendsCounter.html(friends.length + ' ' + (friends.length > 1 ? 'amigos' : 'amigo'));
-	}
+	friends.pop();
+	friendsCounter.html(friends.length + ' ' + (friends.length > 1 ? 'amigos' : 'amigo'));
+
 }
 
 function rejectFriend(message) {
@@ -173,8 +292,14 @@ function unblockUser() {
 	apretaste.send({
 		command: 'amigos desbloquear',
 		data: {id: currentUser, username: currentUsername},
-		redirect: true
+		redirect: false,
+		callback: {
+			name: 'showToast',
+			data: 'Usuario desbloqueado'
+		}
 	});
+
+	$('#' + currentUser).remove();
 }
 
 // open search input
@@ -233,12 +358,9 @@ function rejectFriendCallback(data) {
 	$('#' + data.id).remove();
 
 	var waitingCounter = $('#waitingCounter');
-	if (waiting.length === 1) {
-		waitingCounter.parent().remove();
-	} else {
-		waiting.pop();
-		waitingCounter.html(waiting.length + ' ' + (waiting.length > 1 ? 'peticiones' : 'petición'));
-	}
+	waiting.pop();
+	waitingCounter.html(waiting.length + ' ' + (waiting.length > 1 ? 'peticiones' : 'petición'));
+
 
 	var users = $('.waiting, .friend');
 
