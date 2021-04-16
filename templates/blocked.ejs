@@ -4,7 +4,7 @@
             <div class="chip tiny">
                 <i class="fa fa-user-alt"></i>
                 <span id="friendsCounter">
-					<%= blocked.length %> <%= blocked.length !== 1 ? 'bloqueados' : 'bloqueado' %>
+					<%= blockedCount %> <%= blockedCount !== 1 ? 'bloqueados' : 'bloqueado' %>
 				</span>
             </div>
 
@@ -38,7 +38,7 @@
         <% }) %>
     </div>
 
-    <% if(blocked.length == 0){ %>
+    <% if(blockedCount == 0){ %>
         <p class="middle-center center grey-text">No ha bloqueado a nadie.</p>
     <% } %>
 

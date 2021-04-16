@@ -4,7 +4,7 @@
             <div class="chip tiny">
                 <i class="fa fa-user-alt"></i>
                 <span id="friendsCounter">
-					<%= friends.length %> <%= friends.length > 1 ? 'amigos' : 'amigo' %>
+					<%= friendsCount %> <%= friendsCount > 1 ? 'amigos' : 'amigo' %>
 				</span>
             </div>
 
@@ -48,7 +48,7 @@
         <% }) %>
     </div>
 
-    <% if(friends.length == 0){ %>
+    <% if(friendsCount == 0){ %>
         <p class="middle-center center grey-text">Aún no tiene amigos.</p>
     <% } %>
 

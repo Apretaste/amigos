@@ -22,7 +22,8 @@ class Service
 	{
 		$isInfluencer = $request->person->isInfluencer;
 		$page = $request->input->data->page ?? 1;
-		$pages = ceil($request->person->getFriendsCount() / 50);
+		$friendsCount = $request->person->getFriendsCount();
+		$pages = ceil($friendsCount / 50);
 
 		$friends = $request->person->getFriends(false, $page);
 
@@ -47,6 +48,7 @@ class Service
 
 		$content = [
 			'friends' => $friends,
+			'friendsCount' => $friendsCount,
 			'page' => $page,
 			'pages' => $pages,
 			'title' => 'Amigos',
@@ -69,7 +71,8 @@ class Service
 	{
 		$isInfluencer = $request->person->isInfluencer;
 		$page = $request->input->data->page ?? 1;
-		$pages = ceil($request->person->getFriendRequestsCount());
+		$waitingCount = $request->person->getFriendRequestsCount();
+		$pages = ceil($waitingCount / 50);
 
 		$waiting = [];
 		if (!$isInfluencer) {
@@ -98,6 +101,7 @@ class Service
 
 		$content = [
 			'waiting' => $waiting,
+			'waitingCount' => $waitingCount,
 			'page' => $page,
 			'pages' => $pages,
 			'title' => 'Solicitudes',
@@ -120,7 +124,8 @@ class Service
 	{
 		$isInfluencer = $request->person->isInfluencer;
 		$page = $request->input->data->page ?? 1;
-		$pages = ceil($request->person->getPeopleBlockedCount());
+		$blockedCount = $request->person->getPeopleBlockedCount();
+		$pages = ceil($blockedCount / 50);
 
 		$blocked = $request->person->getPeopleBlocked();
 
@@ -141,6 +146,7 @@ class Service
 
 		$content = [
 			'blocked' => $blocked,
+			'blockedCount' => $blockedCount,
 			'page' => $page,
 			'pages' => $pages,
 			'title' => 'Bloqueados',
