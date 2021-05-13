@@ -114,6 +114,7 @@ class Service
 	 * @param Request $request
 	 * @param Response $response
 	 * @throws Alert
+	 * @throws \Apretaste\Alert
 	 * @author ricardo
 	 */
 	public function _blocked(Request $request, Response $response)
@@ -122,7 +123,7 @@ class Service
 		$page = $request->input->data->page ?? 1;
 		$pages = ceil($request->person->getPeopleBlockedCount());
 
-		$blocked = $request->person->getPeopleBlocked();
+		$blocked = $request->person->getPeopleBlocked(true, $page, 50, false);
 
 		foreach ($blocked as &$result) {
 			$user = Database::queryFirst("SELECT id, username, gender, avatar, avatarColor, online FROM person WHERE id={$result} LIMIT 1");
