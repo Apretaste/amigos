@@ -1,0 +1,27 @@
+<div class="row" style="margin-top: 10px">
+    <div class="col s12">
+        <ul class="collection one-line">
+            <% for(var i in results) { var item = itemList[i]; %>
+            <li class="collection-item avatar">
+                <div class="person-avatar circle left"
+                <% if(parseInt(item.is_influencer) == 1){ %>
+                     creator_image="{{APP_SERVICE_PATH}}/images/<%= item.username %>.png"
+                     state="gold"
+                        <% } %>
+                     face="<%= item.avatar %>"
+                     color="<%= item.avatarColor %>"
+                     size="30" online="<%= item.online %>">
+                </div>
+                <p>
+                    <span class="title">
+                        <a class="<%= item.gender || 'black-text' %>" href="#!" onclick="apretaste.send({command: 'PERFIL', data:{username: '<%= item.username %>'}});">@<%= item.username %></a>
+                    </span>
+                </p>
+                <span class="chip tiny clear spacing">
+                    <%= item.fullName %>
+                </span>
+            </li>
+            <% } %>
+        </ul>
+    </div>
+</div>

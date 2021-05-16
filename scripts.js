@@ -1,7 +1,57 @@
-$(function () {
-	// initialize components
+$(document).ready(function() {
+	// start components
 	$('.tabs').tabs();
 	$('.modal').modal();
+	$('select').formSelect();
+
+	// set reminder function
+	$('.remainder').on('input', function(){
+		// get values
+		var message = $(this).val().trim();
+		var maxlength = $(this).attr('maxlength');
+		var counter = $("label[for='" + $(this).attr('id') + "'] span");
+
+		// calculate the reminder
+		var remainder = (message.length <= maxlength) ? (maxlength - message.length) : 0;
+
+		// restrict message to maxlength
+		if (remainder <= 0) {
+			message = message.substring(0, maxlength);
+			$(this).val(message);
+		}
+
+		// update the counter with the remainder amount
+		counter.html(message.length);
+	})
+
+	// forms
+	$(".ap-form").submit(function(e) {
+		e.preventDefault();
+
+		var form = $(this);
+		var valid = true;
+		var data = getDataForm(form);
+
+		var validator = form.attr('data-validator');
+		if (validator)  {
+			eval('valid = ' + validator +'(data)');
+			if (!valid) return;
+		}
+
+		var redirect = form.attr('data-redirect');
+		if (typeof redirect === 'undefined') { redirect = true; }
+		else redirect = redirect !== 'false';
+
+		var callback = form.attr('data-callback');
+		if (typeof callback === 'undefined') callback = null;
+
+		apretaste.send({
+			command: form.attr('action'),
+			data: data,
+			redirect: redirect,
+			callback: {name: callback}
+		});
+	});
 
 	if (asyncAllowed() && typeof page != "undefined") {
 		document.addEventListener('scroll', function () {
@@ -25,6 +75,11 @@ $(function () {
 		$('#paginationFooter').show();
 	}
 });
+
+
+function searchFormValidator(data) {
+	return true;
+}
 
 function asyncAllowed() {
 	return typeof apretaste.connectionMethod != 'undefined' && apretaste.connectionMethod == 'http';

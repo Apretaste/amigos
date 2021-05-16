@@ -213,6 +213,16 @@ class Service
 	}
 
 	/**
+	 * @param Request $request
+	 * @param Response $response
+	 * @throws Alert
+	 * @throws \Apretaste\Alert
+	 */
+	public function _busqueda(Request $request, Response $response) {
+		$response->setTemplate('searchForm.ejs', []);
+	}
+
+	/**
 	 * Search friends by username
 	 *
 	 * @param Request $request
@@ -222,42 +232,56 @@ class Service
 	 */
 	public function _buscar(Request $request, Response $response)
 	{
-		// get the friend from username
-		$username = $request->input->data->username ?? false;
-		$user = Person::find($username);
+		$limit  = 20;
+		$offset = 0;
+		$where = '';
 
-		// if username exist ...
-		if ($user) {
-			// send request
-			$request->person->requestFriend($user->id);
+		$username = Database::escape($request->input->data->username ?? '');
+		$email = Database::escape($request->input->data->email ?? '');
+		$cellphone = Database::escape($request->input->data->cellphone ?? '');
+		$gender = Database::escape($request->input->data->gender ?? '');
+		$ageFrom = (int) Database::escape($request->input->data->ageFrom ?? '');
+		$ageTo = (int) Database::escape($request->input->data->ageTo ?? '');
+		$province = Database::escape($request->input->data->profince ?? '');
+		$sexual_orientation = Database::escape($request->input->data->sexual_orientation ?? '');
+		$religion = Database::escape($request->input->data->religion ?? '');
 
-			// complete tutorial
-			if ($user->username == 'apretin') {
-				Tutorial::complete($request->person->id, 'add_apretin');
-			}
+		$where .= (empty($username) ? '' : " AND username = '$username' ");
+		$where .= (empty($email) ? '' : " AND email = '$email' ");
+		$where .= (empty($cellphone) ? '' : " AND cellphone = '$cellphone' ");
+		$where .= (empty($gender) ? '' : " AND gender = '$gender' ");
+		$where .= (empty($province) ? '' : " AND province = '$province' ");
+		$where .= (empty($sexual_orientation) ? '' : " AND sexual_orientation = '$sexual_orientation' ");
+		$where .= (empty($religion) ? '' : " AND religion = '$religion' ");
+		$where .= (empty($ageFrom) ? '' : " AND year_of_birth IS NULL OR IFNULL(YEAR(NOW())-year_of_birth,0) >= $ageFrom ");
+		$where .= (empty($ageTo) ? '' : " AND year_of_birth IS NULL OR IFNULL(YEAR(NOW())-year_of_birth,0) <= $ageTo ");
 
-			// prepare response
-			$content = [
-				"header" => 'Solicitud enviada',
-				"text" => "Has enviado una solicitud de amistad a @{$user->username}",
-				'icon' => "person_add",
-				'btn' => ['command' => 'amigos', 'caption' => 'Ver amigos']
-			];
-		} // if username do not exist ...
-		else {
-			// prepare response
-			$username = str_replace('@', '', $username);
-			$content = [
-				"header" => 'Lo sentimos',
-				"text" => "El usuario @$username no fue encontrado.",
-				'icon' => "sentiment_very_dissatisfied",
-				'btn' => ['command' => 'amigos', 'caption' => 'Ver amigos']
+		$chips = [$username, $email, $cellphone, $gender, $province, $sexual_orientation, $religion];
+		if (!empty($ageFrom)) $chips[] = 'de '.$ageFrom.' a '.$ageTo;
+
+		$chips = array_filter($chips, function($value){
+			if (empty($chips)) return false;
+			return true;
+		});
+
+		$results = Database::query("SELECT id FROM person WHERE TRUE $where LIMIT $limit OFFSET $offset");
+
+		$newResults = [];
+		foreach ($results as $item) {
+			$person = Person::find($item->id);
+			$newResults[] = (object) [
+				'id' => $person->id,
+				'fullName' => $person->fullName,
+				'avatar' => $person->avatar,
+				'avatarColor' => $person->avatarColor,
+				'experience' => $person->experience
 			];
 		}
 
-		// send data to the view
-		$response->setCache('hour');
-		$response->setTemplate('message.ejs', $content);
+		$response->setTemplate('message.ejs', [
+			'results' => $results,
+			'chips' => $chips
+		]);
 	}
 
 	/**

@@ -1,0 +1,138 @@
+<form class="ap-form" action="AMIGOS BUSCAR" data-validator="searchFormValidator">
+    <div class="row">
+        <div class="col s12">
+            <h1>Buscar amigos</h1>
+
+            <!-- username -->
+            <div class="input-field">
+                <input id="username" name="username" maxlength="50" value="<%= username %>" class="remainder materialize-textarea" />
+                <label for="title">Nombre de usuario</label>
+            </div>
+
+            <!-- email -->
+            <div class="input-field">
+                <input id="email" name="email" type="text" value="<%= email %>" required="" aria-required="true"/>
+                <label for="email">Email</label>
+            </div>
+
+            <!-- email -->
+            <div class="input-field">
+                <input id="cellphone" name="cellphone" maxlength="50" value="<%= cellphone %>" class="remainder materialize-textarea" />
+                <label for="title">Celular</label>
+            </div>
+
+            <!-- gender -->
+            <div class="input-field">
+                <select id="gender" name="gender" class="materialize-select">
+                    <option value=""></option>
+                    <option value="M">Masculino</option>
+                    <option value="F">Femenino</option>
+                </select>
+                <label for="category">G&eacute;nero</label>
+            </div>
+
+            <!-- AGE RANGE -->
+            <div class="input-field col s6">
+                <i class="fa fa-bullseye prefix grey-text text-darken-2"></i>
+                <select id="ageFrom" name = "ageFrom">
+                    <% for(var i=16; i<=100;i++) { %>
+                        <option value="<%= i %>" <% if (profile.minAge === i) {%> selected <% } %>><%= i %></option>
+                    <% } %>
+                </select>
+                <label for="ageFrom">¿Desde qué edad buscas?</label>
+            </div>
+            <div class="input-field col s6">
+                <select id="ageTo" name ="ageTo">
+                    <% for(var i=16; i<=100;i++) { %>
+                        <option value="<%= i %>" <% if (profile.maxAge === i) {%> selected <% } %>><%= i %></option>
+                    <% } %>
+                </select>
+                <label for="ageTo">Hasta</label>
+            </div>
+
+            <% var provinces = {
+                    'PINAR_DEL_RIO': 'Pinar del Río',
+                    'LA_HABANA': 'La Habana',
+                    'ARTEMISA': 'Artemisa',
+                    'MAYABEQUE': 'Mayabeque',
+                    'MATANZAS': 'Matanzas',
+                    'VILLA_CLARA': 'Villa Clara',
+                    'CIENFUEGOS': 'Cienfuegos',
+                    'SANCTI_SPIRITUS': 'Sancti Spiritus',
+                    'CIEGO_DE_AVILA': 'Ciego de Ávila',
+                    'CAMAGUEY': 'Camagüey',
+                    'LAS_TUNAS': 'Las Tunas',
+                    'HOLGUIN': 'Holguín',
+                    'GRANMA': 'Granma',
+                    'SANTIAGO_DE_CUBA': 'Santiago de Cuba',
+                    'GUANTANAMO': 'Guantánamo',
+                    'ISLA_DE_LA_JUVENTUD': 'Isla de la Juventud'
+            }; %>
+
+            <!-- PROVINCE-->
+            <div class="input-field province-div col s12 m6">
+                <i class="material-icons prefix grey-text text-darken-2">place</i>
+                <select id="province" name="province" class="validate">
+                    <option value=""></option>
+                    <% Object.keys(province).forEach(function(key){ %>
+                        <option value="<%= key %>"><%= province[key] %></option>
+                    <% }) %>
+                </select>
+                <label for="province">Provincia</label>
+            </div>
+
+            <%
+            var sexualOrientation = {'HETERO': 'Heterosexual', 'HOMO': 'Homosexual', 'BI': 'Bisexual'};
+            %>
+            <!-- SEXUAL ORIENTATION -->
+            <div class="input-field col s12 m6">
+                <i class="material-icons prefix grey-text text-darken-2">favorite</i>
+                <select id="sexual_orientation" name="sexual_orientation" class="validate">
+                    <option value=""></option>
+                    <% Object.keys(sexualOrientation).forEach(function(key){ %>
+                        <option value="<%= key %>"><%= sexualOrientation[key] %></option>
+                    <% }) %>
+                </select>
+                <label for="sexual_orientation">Orientación Sexual</label>
+            </div>
+
+            <%
+            var religion = {
+                'ATEISMO': 'Ateísmo',
+                'SECULARISMO': 'Secularismo',
+                'AGNOSTICISMO': 'Agnosticismo',
+                'ISLAM': 'Islamismo',
+                'JUDAISTA': 'Judaísmo',
+                'ABAKUA': 'Abakuá',
+                'SANTERO': 'Santería',
+                'YORUBA': 'Yorubismo',
+                'BUDISMO': 'Budismo',
+                'CATOLICISMO': 'Catolicismo',
+                'CRISTIANISMO': 'Cristianismo',
+                'PROTESTANTE': 'Protestante',
+                'OTRA': 'Otra'
+            };
+            %>
+            <div class="input-field col s12 m6">
+                <i class="material-icons prefix grey-text text-darken-2"> flare </i>
+                <select id="religion" name="religion" class="validate">
+                    <option value=""></option>
+                    <% Object.keys(religion).forEach(function(key) { %>
+                        <option value="<%= key %>"><%= religion[key] %></option>
+                    <% }) %>
+                </select>
+                <label for="religion">Religión</label>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="bottom-space"></div>
+
+    <!-- BUTTON -->
+    <div id="btn" class="fixed-action-btn">
+        <button type="submit" class="btn-floating btn-large waves-effect waves-light green">
+            <i class="material-icons">search</i>
+        </button>
+    </div>
+</form>
