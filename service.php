@@ -291,6 +291,7 @@ class Service
     								           OR  (person.id = K.user2 AND K.user1 = {$request->person->id})
 									WHERE K.user1 IS NULL) subq WHERE TRUE AND friend = 0 AND wating = 0 "
 									. (empty($username) ? '' : " AND match_username = 1 ")
+									. (empty($fullname) ? '' : " AND match_fullname = 1 ")
 									. (empty($email) ? '' : " AND match_email = 1 ")
 									. (empty($cellphone) ? '' : " AND match_cellphone = 1")
 									. (empty($gender) ? '' : " AND match_gender = 1 ")
@@ -299,7 +300,7 @@ class Service
 									. (empty($religion) ? '' : " AND match_religion = 1 ")
 									. (empty($ageFrom) ? '' : " AND match_age_from = 1 ")
 									. (empty($ageTo) ? '' : " AND match_age_to = 1 ")
-									. " ORDER BY match_username + match_email + match_cellphone + match_gender 
+									. " ORDER BY match_username + match_fullname + match_email + match_cellphone + match_gender 
 										+ match_sexual + match_province + match_religion + match_age_from + match_age_to DESC, active DESC, online DESC, last_access DESC  
 									LIMIT $offset, $limit ");
 
