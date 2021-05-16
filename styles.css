@@ -369,3 +369,7 @@ ul.chat li {
 #loadingText{
     margin-bottom: 3rem;
 }
+
+.collection-item.avatar {
+    min-height: 60px !important;
+}

@@ -19,19 +19,19 @@
                     <span class="title">
                         <a class="<%= item.gender || 'black-text' %>" href="#!" onclick="apretaste.send({command: 'PERFIL', data:{username: '<%= item.username %>'}});">@<%= item.username %></a>
                     </span>
-                </p>
-                <span>
-                    <%= item.fullName %>
-                </span>
-                <% if(!item.friend) { %>
-                    <span class="right float-right">
+                    <% if(!item.friend) { %>
+                        <span class="right float-right">
                         <a href="#!">
                             <i class="fa fa-user-plus green-text"
                                onclick="addFriendModalOpen('<%= item.id %>', '<%= item.username %>')">
                             </i>
                         </a>
                     </span>
-                <% } %>
+                    <% } %>
+                </p>
+                <span>
+                    <%= item.fullName %>
+                </span>
             </li>
             <% } %>
         </ul>
