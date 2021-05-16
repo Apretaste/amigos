@@ -249,6 +249,7 @@ class Service
 		$offset = 0;
 
 		$username = Database::escape($request->input->data->username ?? '');
+		$fullname = Database::escape($request->input->data->fullname ?? '');
 		$email = Database::escape($request->input->data->email ?? '');
 		$cellphone = Database::escape($request->input->data->cellphone ?? '');
 		$gender = Database::escape($request->input->data->gender ?? '');
@@ -269,6 +270,8 @@ class Service
 		$results = Database::query("SELECT * FROM (SELECT 
 										person.id, person.active, person.online, person.last_access,
 										IF(person.username like '%$username%', 1, 0) AS match_username,
+                      					IF('$fullname' like concat(concat('%',first_name),'%')
+                      					    OR '$fullname' like concat(concat('%',last_name),'%'), 1, 0) as match_fullname,
 										IF(email like '%$email%', 1 ,0) AS match_email,
 										IF(cellphone like '%$cellphone%', 1, 0) AS match_cellphone,
 										IF(gender = '$gender', 1, 0) AS match_gender,
