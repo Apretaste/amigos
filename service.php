@@ -266,7 +266,7 @@ class Service
 		});
 
 		$results = Database::query("SELECT * FROM (SELECT 
-										person.id, 
+										person.id, person.active, person.online, person.last_access,
 										IF(person.username like '%$username%', 1, 0) AS match_username,
 										IF(email like '%$email%', 1 ,0) AS match_email,
 										IF(cellphone like '%$cellphone%', 1, 0) AS match_cellphone,
@@ -293,7 +293,7 @@ class Service
 									. (empty($ageFrom) ? '' : " AND match_age_from = 1 ")
 									. (empty($ageTo) ? '' : " AND match_age_to = 1 ")
 									. " ORDER BY match_username + match_email + match_cellphone + match_gender 
-										+ match_sexual + match_province + match_religion + match_age_from + match_age_to DESC 
+										+ match_sexual + match_province + match_religion + match_age_from + match_age_to DESC, active DESC, online DESC, last_access DESC  
 									LIMIT $offset, $limit ");
 
 		$newResults = [];
