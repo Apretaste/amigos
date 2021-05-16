@@ -221,6 +221,7 @@ class Service
 	public function _busqueda(Request $request, Response $response) {
 		$response->setTemplate('searchForm.ejs', [
 			'username' => '',
+			'email' => '',
 			'cellphone' => '',
 			'fullName' => '',
 			'gender' => '',
