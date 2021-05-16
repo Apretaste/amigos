@@ -81,6 +81,32 @@ function searchFormValidator(data) {
 	return true;
 }
 
+
+/**
+ *
+ * @param form
+ * @returns {{}}
+ */
+function getDataForm(form) {
+	var serial = form.serializeArray();
+	var data = {};
+
+	for (var field in serial) {
+		var fn = serial[field].name;
+
+		if (fn.indexOf('[]') > 0) {
+			fn = fn.replace('[]', '');
+			if (typeof data[fn] === 'undefined') data[fn] = [];
+			data[fn].push(serial[field].value);
+		} else {
+			data[serial[field].name] = serial[field].value;
+		}
+	}
+
+	return data;
+}
+
+
 function asyncAllowed() {
 	return typeof apretaste.connectionMethod != 'undefined' && apretaste.connectionMethod == 'http';
 }
