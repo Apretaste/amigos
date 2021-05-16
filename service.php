@@ -265,7 +265,7 @@ class Service
 			return true;
 		});
 
-		$results = Database::query("SELECT 
+		$results = Database::query("SELECT * FROM (SELECT 
 										person.id, 
 										IF(person.username like '%$username%', 1, 0) AS match_username,
 										IF(email like '%$email%', 1 ,0) AS match_email,
@@ -292,7 +292,7 @@ class Service
 									. (empty($religion) ? '' : " AND match_religion = 1 ")
 									. (empty($ageFrom) ? '' : " AND match_age_from = 1 ")
 									. (empty($ageTo) ? '' : " AND match_age_to = 1 ")
-									. " ORDER BY match_username + match_email + match_cellphone + match_gender 
+									. ") subq ORDER BY match_username + match_email + match_cellphone + match_gender 
 										+ match_sexual + match_province + match_religion + match_age_from + match_age_to DESC 
 									LIMIT $offset, $limit ");
 
