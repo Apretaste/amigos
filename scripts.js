@@ -307,7 +307,6 @@ function addFriendCallback(message) {
 	waiting.pop();
 	waitingCounter.html(waiting.length + ' ' + (waiting.length > 1 ? 'peticiones' : 'petición'));
 
-
 	$('#' + currentUser).remove();
 }
 

@@ -5,7 +5,7 @@
         <% } %>
         <ul class="collection one-line">
             <% for(var i in results) { var item = results[i]; %>
-            <li class="collection-item avatar">
+            <li class="collection-item avatar" data-id="<%= item.id %>">
                 <div class="person-avatar circle left"
                 <% if(parseInt(item.is_influencer) == 1){ %>
                      creator_image="{{APP_SERVICE_PATH}}/images/<%= item.username %>.png"
@@ -23,13 +23,15 @@
                 <span>
                     <%= item.fullName %>
                 </span>
-                <span class="float-right">
-                    <a href="#!">
-                        <i class="fa fa-user-plus green-text"
-                           onclick="acceptModalOpen('<%= item.id %>', '<%= item.username %>')">
-                        </i>
-                    </a>
-                </span>
+                <% if(!item.friend) { %>
+                    <span class="right float-right">
+                        <a href="#!">
+                            <i class="fa fa-user-plus green-text"
+                               onclick="addFriendModalOpen('<%= item.id %>', '<%= item.username %>')">
+                            </i>
+                        </a>
+                    </span>
+                <% } %>
             </li>
             <% } %>
         </ul>
