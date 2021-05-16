@@ -35,16 +35,18 @@
             <div class="input-field col s6">
                 <i class="fa fa-bullseye prefix grey-text text-darken-2"></i>
                 <select id="ageFrom" name = "ageFrom">
+                    <option value=""></option>
                     <% for(var i=16; i<=100;i++) { %>
-                        <option value="<%= i %>" <% if (profile.minAge === i) {%> selected <% } %>><%= i %></option>
+                        <option value="<%= i %>" <% if (ageFrom === i) {%> selected <% } %>><%= i %></option>
                     <% } %>
                 </select>
                 <label for="ageFrom">¿Desde qué edad buscas?</label>
             </div>
             <div class="input-field col s6">
                 <select id="ageTo" name ="ageTo">
+                    <option value=""></option>
                     <% for(var i=16; i<=100;i++) { %>
-                        <option value="<%= i %>" <% if (profile.maxAge === i) {%> selected <% } %>><%= i %></option>
+                        <option value="<%= i %>" <% if (ageTo === i) {%> selected <% } %>><%= i %></option>
                     <% } %>
                 </select>
                 <label for="ageTo">Hasta</label>
