@@ -261,7 +261,7 @@ class Service
 		if (!empty($ageFrom)) $chips[] = 'de '.$ageFrom.' a '.$ageTo;
 
 		$chips = array_filter($chips, function($value){
-			if (empty($chips)) return false;
+			if (empty($value)) return false;
 			return true;
 		});
 
