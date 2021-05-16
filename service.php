@@ -219,7 +219,17 @@ class Service
 	 * @throws \Apretaste\Alert
 	 */
 	public function _busqueda(Request $request, Response $response) {
-		$response->setTemplate('searchForm.ejs', []);
+		$response->setTemplate('searchForm.ejs', [
+			'username' => '',
+			'cellphone' => '',
+			'fullName' => '',
+			'gender' => '',
+			'ageFrom' => 0,
+			'ageTo' => 0,
+			'province' => '',
+			'sexual_orientation' => '',
+			'religion' => ''
+		]);
 	}
 
 	/**
