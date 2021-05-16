@@ -303,9 +303,11 @@ function addFriend(message) {
 function addFriendCallback(message) {
 	showToast(message);
 
-	var waitingCounter = $('#waitingCounter');
-	waiting.pop();
-	waitingCounter.html(waiting.length + ' ' + (waiting.length > 1 ? 'peticiones' : 'petición'));
+	if (typeof waiting !== 'undefined') {
+		var waitingCounter = $('#waitingCounter');
+		waiting.pop();
+		waitingCounter.html(waiting.length + ' ' + (waiting.length > 1 ? 'peticiones' : 'petición'));
+	}
 
 	$('#' + currentUser).remove();
 }

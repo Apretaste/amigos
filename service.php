@@ -276,13 +276,16 @@ class Service
 										IF(religion = '$religion', 1,0) AS match_religion,
 										IF(year_of_birth IS NULL OR IFNULL(YEAR(NOW())-year_of_birth,0) >= $ageFrom, 1, 0) AS match_age_from,
 										IF(year_of_birth IS NULL OR IFNULL(YEAR(NOW())-year_of_birth,0) <= $ageTo, 1, 0) AS match_age_to,
-										B.user1 IS NOT NULL as friend 
+										B.user1 IS NOT NULL as friend,
+                      					W.user1 IS NOT NULL as wating
 									FROM person 
     								LEFT JOIN person_relation_friend B ON (person.id = B.user1 AND B.user2 = {$request->person->id}) 
-    								           OR (person.id = B.user2 AND B.user1 = {$request->person->id})
+										   OR (person.id = B.user2 AND B.user1 = {$request->person->id})
+									LEFT JOIN apretaste.person_relation_waiting W ON (person.id = W.user1 AND W.user2 = {$request->person->id}) 
+										   OR (person.id = W.user2 AND W.user1 = {$request->person->id})
 									LEFT JOIN person_relation_blocked K ON (person.id = K.user1 AND K.user2 = {$request->person->id}) 
     								           OR  (person.id = K.user2 AND K.user1 = {$request->person->id})
-									WHERE K.user1 IS NULL) subq WHERE TRUE "
+									WHERE K.user1 IS NULL) subq WHERE TRUE AND friend = 0 AND wating = 0 "
 									. (empty($username) ? '' : " AND match_username = 1 ")
 									. (empty($email) ? '' : " AND match_email = 1 ")
 									. (empty($cellphone) ? '' : " AND match_cellphone = 1")
