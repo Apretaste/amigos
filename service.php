@@ -257,9 +257,9 @@ class Service
 		$sexual_orientation = Database::escape($request->input->data->sexual_orientation ?? '');
 		$religion = Database::escape($request->input->data->religion ?? '');
 
-		$where .= (empty($username) ? '' : " AND username = '$username' ");
-		$where .= (empty($email) ? '' : " AND email = '$email' ");
-		$where .= (empty($cellphone) ? '' : " AND cellphone = '$cellphone' ");
+		$where .= (empty($username) ? '' : " AND username like '%$username%' ");
+		$where .= (empty($email) ? '' : " AND email like '%$email%' ");
+		$where .= (empty($cellphone) ? '' : " AND cellphone like '%$cellphone%' ");
 		$where .= (empty($gender) ? '' : " AND gender = '$gender' ");
 		$where .= (empty($province) ? '' : " AND province = '$province' ");
 		$where .= (empty($sexual_orientation) ? '' : " AND sexual_orientation = '$sexual_orientation' ");
