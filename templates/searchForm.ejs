@@ -30,100 +30,98 @@
                 </select>
                 <label for="gender">G&eacute;nero</label>
             </div>
+        </div>
+        <!-- AGE RANGE -->
+        <div class="input-field col s6">
+            <select id="ageFrom" name = "ageFrom">
+                <option value=""></option>
+                <% for(var i=16; i<=100;i++) { %>
+                    <option value="<%= i %>" <% if (ageFrom === i) {%> selected <% } %>><%= i %></option>
+                <% } %>
+            </select>
+            <label for="ageFrom">¿Desde qué edad buscas?</label>
+        </div>
+        <div class="input-field col s6">
+            <select id="ageTo" name ="ageTo">
+                <option value=""></option>
+                <% for(var i=16; i<=100;i++) { %>
+                    <option value="<%= i %>" <% if (ageTo === i) {%> selected <% } %>><%= i %></option>
+                <% } %>
+            </select>
+            <label for="ageTo">Hasta</label>
+        </div>
 
-            <!-- AGE RANGE -->
-            <div class="input-field col s6">
-                <select id="ageFrom" name = "ageFrom">
-                    <option value=""></option>
-                    <% for(var i=16; i<=100;i++) { %>
-                        <option value="<%= i %>" <% if (ageFrom === i) {%> selected <% } %>><%= i %></option>
-                    <% } %>
-                </select>
-                <label for="ageFrom">¿Desde qué edad buscas?</label>
-            </div>
-            <div class="input-field col s6">
-                <select id="ageTo" name ="ageTo">
-                    <option value=""></option>
-                    <% for(var i=16; i<=100;i++) { %>
-                        <option value="<%= i %>" <% if (ageTo === i) {%> selected <% } %>><%= i %></option>
-                    <% } %>
-                </select>
-                <label for="ageTo">Hasta</label>
-            </div>
+        <% var provinces = {
+                'PINAR_DEL_RIO': 'Pinar del Río',
+                'LA_HABANA': 'La Habana',
+                'ARTEMISA': 'Artemisa',
+                'MAYABEQUE': 'Mayabeque',
+                'MATANZAS': 'Matanzas',
+                'VILLA_CLARA': 'Villa Clara',
+                'CIENFUEGOS': 'Cienfuegos',
+                'SANCTI_SPIRITUS': 'Sancti Spiritus',
+                'CIEGO_DE_AVILA': 'Ciego de Ávila',
+                'CAMAGUEY': 'Camagüey',
+                'LAS_TUNAS': 'Las Tunas',
+                'HOLGUIN': 'Holguín',
+                'GRANMA': 'Granma',
+                'SANTIAGO_DE_CUBA': 'Santiago de Cuba',
+                'GUANTANAMO': 'Guantánamo',
+                'ISLA_DE_LA_JUVENTUD': 'Isla de la Juventud'
+        }; %>
 
-            <% var provinces = {
-                    'PINAR_DEL_RIO': 'Pinar del Río',
-                    'LA_HABANA': 'La Habana',
-                    'ARTEMISA': 'Artemisa',
-                    'MAYABEQUE': 'Mayabeque',
-                    'MATANZAS': 'Matanzas',
-                    'VILLA_CLARA': 'Villa Clara',
-                    'CIENFUEGOS': 'Cienfuegos',
-                    'SANCTI_SPIRITUS': 'Sancti Spiritus',
-                    'CIEGO_DE_AVILA': 'Ciego de Ávila',
-                    'CAMAGUEY': 'Camagüey',
-                    'LAS_TUNAS': 'Las Tunas',
-                    'HOLGUIN': 'Holguín',
-                    'GRANMA': 'Granma',
-                    'SANTIAGO_DE_CUBA': 'Santiago de Cuba',
-                    'GUANTANAMO': 'Guantánamo',
-                    'ISLA_DE_LA_JUVENTUD': 'Isla de la Juventud'
-            }; %>
+        <!-- PROVINCE-->
+        <div class="input-field province-div col s12 m6">
+            <select id="province" name="province" class="validate">
+                <option value=""></option>
+                <% Object.keys(provinces).forEach(function(key){ %>
+                    <option value="<%= key %>"><%= provinces[key] %></option>
+                <% }) %>
+            </select>
+            <label for="province">Provincia</label>
+        </div>
 
-            <!-- PROVINCE-->
-            <div class="input-field province-div col s12 m6">
-                <select id="province" name="province" class="validate">
-                    <option value=""></option>
-                    <% Object.keys(provinces).forEach(function(key){ %>
-                        <option value="<%= key %>"><%= provinces[key] %></option>
-                    <% }) %>
-                </select>
-                <label for="province">Provincia</label>
-            </div>
+        <%
+        var sexualOrientation = {'HETERO': 'Heterosexual', 'HOMO': 'Homosexual', 'BI': 'Bisexual'};
+        %>
+        <!-- SEXUAL ORIENTATION -->
+        <div class="input-field col s12 m6">
+            <select id="sexual_orientation" name="sexual_orientation" class="validate">
+                <option value=""></option>
+                <% Object.keys(sexualOrientation).forEach(function(key){ %>
+                    <option value="<%= key %>"><%= sexualOrientation[key] %></option>
+                <% }) %>
+            </select>
+            <label for="sexual_orientation">Orientación Sexual</label>
+        </div>
 
-            <%
-            var sexualOrientation = {'HETERO': 'Heterosexual', 'HOMO': 'Homosexual', 'BI': 'Bisexual'};
-            %>
-            <!-- SEXUAL ORIENTATION -->
-            <div class="input-field col s12 m6">
-                <select id="sexual_orientation" name="sexual_orientation" class="validate">
-                    <option value=""></option>
-                    <% Object.keys(sexualOrientation).forEach(function(key){ %>
-                        <option value="<%= key %>"><%= sexualOrientation[key] %></option>
-                    <% }) %>
-                </select>
-                <label for="sexual_orientation">Orientación Sexual</label>
-            </div>
-
-            <%
-            var religions = {
-                'ATEISMO': 'Ateísmo',
-                'SECULARISMO': 'Secularismo',
-                'AGNOSTICISMO': 'Agnosticismo',
-                'ISLAM': 'Islamismo',
-                'JUDAISTA': 'Judaísmo',
-                'ABAKUA': 'Abakuá',
-                'SANTERO': 'Santería',
-                'YORUBA': 'Yorubismo',
-                'BUDISMO': 'Budismo',
-                'CATOLICISMO': 'Catolicismo',
-                'CRISTIANISMO': 'Cristianismo',
-                'PROTESTANTE': 'Protestante',
-                'OTRA': 'Otra'
-            };
-            %>
-            <div class="input-field col s12 m6">
-                <select id="religion" name="religion" class="validate">
-                    <option value=""></option>
-                    <% Object.keys(religions).forEach(function(key) { %>
-                        <option value="<%= key %>"><%= religions[key] %></option>
-                    <% }) %>
-                </select>
-                <label for="religion">Religión</label>
-            </div>
+        <%
+        var religions = {
+            'ATEISMO': 'Ateísmo',
+            'SECULARISMO': 'Secularismo',
+            'AGNOSTICISMO': 'Agnosticismo',
+            'ISLAM': 'Islamismo',
+            'JUDAISTA': 'Judaísmo',
+            'ABAKUA': 'Abakuá',
+            'SANTERO': 'Santería',
+            'YORUBA': 'Yorubismo',
+            'BUDISMO': 'Budismo',
+            'CATOLICISMO': 'Catolicismo',
+            'CRISTIANISMO': 'Cristianismo',
+            'PROTESTANTE': 'Protestante',
+            'OTRA': 'Otra'
+        };
+        %>
+        <div class="input-field col s12 m6">
+            <select id="religion" name="religion" class="validate">
+                <option value=""></option>
+                <% Object.keys(religions).forEach(function(key) { %>
+                    <option value="<%= key %>"><%= religions[key] %></option>
+                <% }) %>
+            </select>
+            <label for="religion">Religión</label>
         </div>
     </div>
-
 
     <div class="bottom-space"></div>
 
