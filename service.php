@@ -282,7 +282,7 @@ class Service
     								           OR (person.id = B.user2 AND B.user1 = {$request->person->id})
 									LEFT JOIN person_relation_blocked K ON (person.id = K.user1 AND K.user2 = {$request->person->id}) 
     								           OR  (person.id = K.user2 AND K.user1 = {$request->person->id})
-									WHERE K.user1 IS NULL "
+									WHERE K.user1 IS NULL) subq WHERE TRUE "
 									. (empty($username) ? '' : " AND match_username = 1 ")
 									. (empty($email) ? '' : " AND match_email = 1 ")
 									. (empty($cellphone) ? '' : " AND match_cellphone = 1")
@@ -292,7 +292,7 @@ class Service
 									. (empty($religion) ? '' : " AND match_religion = 1 ")
 									. (empty($ageFrom) ? '' : " AND match_age_from = 1 ")
 									. (empty($ageTo) ? '' : " AND match_age_to = 1 ")
-									. ") subq ORDER BY match_username + match_email + match_cellphone + match_gender 
+									. " ORDER BY match_username + match_email + match_cellphone + match_gender 
 										+ match_sexual + match_province + match_religion + match_age_from + match_age_to DESC 
 									LIMIT $offset, $limit ");
 
