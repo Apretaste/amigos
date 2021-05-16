@@ -262,19 +262,6 @@ function acceptModalOpen(id, username) {
 	M.Modal.getInstance($('#acceptFriendModal')).open();
 }
 
-function searchUser() {
-	var username = $('#search').val();
-	if (username.length < 4) {
-		showToast('Minimo 4 caracteres');
-		return;
-	} else if (username.length > 16) {
-		showToast('Maximo 16 caracteres');
-		return;
-	}
-
-	apretaste.send({command: 'amigos buscar', data: {username: username}});
-}
-
 function addFriend(message) {
 	apretaste.send({
 		command: 'amigos agregar',
