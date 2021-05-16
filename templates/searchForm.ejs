@@ -33,7 +33,6 @@
 
             <!-- AGE RANGE -->
             <div class="input-field col s6">
-                <i class="fa fa-bullseye prefix grey-text text-darken-2"></i>
                 <select id="ageFrom" name = "ageFrom">
                     <option value=""></option>
                     <% for(var i=16; i<=100;i++) { %>
@@ -73,7 +72,6 @@
 
             <!-- PROVINCE-->
             <div class="input-field province-div col s12 m6">
-                <i class="material-icons prefix grey-text text-darken-2">place</i>
                 <select id="province" name="province" class="validate">
                     <option value=""></option>
                     <% Object.keys(province).forEach(function(key){ %>
@@ -88,7 +86,6 @@
             %>
             <!-- SEXUAL ORIENTATION -->
             <div class="input-field col s12 m6">
-                <i class="material-icons prefix grey-text text-darken-2">favorite</i>
                 <select id="sexual_orientation" name="sexual_orientation" class="validate">
                     <option value=""></option>
                     <% Object.keys(sexualOrientation).forEach(function(key){ %>
@@ -116,7 +113,6 @@
             };
             %>
             <div class="input-field col s12 m6">
-                <i class="material-icons prefix grey-text text-darken-2"> flare </i>
                 <select id="religion" name="religion" class="validate">
                     <option value=""></option>
                     <% Object.keys(religion).forEach(function(key) { %>
