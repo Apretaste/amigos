@@ -15,21 +15,12 @@
                 <label for="email">Email</label>
             </div>
 
-            <!-- email -->
+            <!-- celular -->
             <div class="input-field">
                 <input id="cellphone" name="cellphone" maxlength="50" value="<%= cellphone %>"/>
                 <label for="cellphone">Celular</label>
             </div>
 
-            <!-- gender -->
-            <div class="input-field">
-                <select id="gender" name="gender" class="materialize-select">
-                    <option value=""></option>
-                    <option value="M">Masculino</option>
-                    <option value="F">Femenino</option>
-                </select>
-                <label for="gender">G&eacute;nero</label>
-            </div>
         </div>
         <!-- AGE RANGE -->
         <div class="input-field col s6">
@@ -120,6 +111,18 @@
                 <% }) %>
             </select>
             <label for="religion">Religión</label>
+        </div>
+
+        <!-- gender -->
+        <div class="input-field col s12 m6">
+            <div class="input-field">
+                <select id="gender" name="gender" class="materialize-select">
+                    <option value=""></option>
+                    <option value="M">Masculino</option>
+                    <option value="F">Femenino</option>
+                </select>
+                <label for="gender">G&eacute;nero</label>
+            </div>
         </div>
     </div>
 
