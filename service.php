@@ -1,5 +1,7 @@
 <?php
 
+use Apretaste\Config;
+use Apretaste\Email;
 use Apretaste\Person;
 use Apretaste\Request;
 use Apretaste\Response;
@@ -243,9 +245,8 @@ class Service
 	 */
 	public function _buscar(Request $request, Response $response)
 	{
-		$limit  = 20;
+		$limit  = 50;
 		$offset = 0;
-		$where = '';
 
 		$username = Database::escape($request->input->data->username ?? '');
 		$email = Database::escape($request->input->data->email ?? '');
@@ -346,6 +347,17 @@ class Service
 
 			// create the friend request
 			$request->person->requestFriend($userId);
+
+			$friend = Person::find($userId);
+
+			if (!$friend->isActive && $friend->isOnMailList) {
+				$supportEmail = Config::pick('general')['support_email'];
+				$content = ['username' => '@' . $request->person->username, 'email' => $supportEmail];
+				$email = new Email();
+				$email->to = $friend->email;
+				$email->subject = '@'.$request->person->username.' te ha enviado una solicitud de amistad';
+				$email->sendFromTemplate($content, 'friend');
+			}
 		}
 	}
 
