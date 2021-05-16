@@ -38,19 +38,21 @@
     </div>
 </div>
 
-<div class="fixed-action-btn hide-on-share">
-    <a class="btn-floating btn-large waves-effect waves-light" href="#!" onclick="apretaste.back()">
-        <i class="material-icons">arrow_back</i>
-    </a>
-</div>
+
 
 <div class="bottom-space"></div>
 
 <!-- SEARCH -->
 <div class="fixed-action-btn">
+
+    <a class="btn-floating btn-large waves-effect waves-light second" href="#!"
+       onclick="apretaste.send({command: 'AMIGOS', data: {}});">
+        <i class="material-icons">arrow_back</i>
+    </a>
+
     <a class="btn-floating btn-large waves-effect waves-light green" href="#!"
        onclick="apretaste.send({command: 'AMIGOS BUSQUEDA', data: {}});">
-        <i class="material-icons">person_add</i>
+        <i class="material-icons">search</i>
     </a>
 </div>
 
