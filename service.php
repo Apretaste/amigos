@@ -290,7 +290,7 @@ class Service
 		}
 
 		$response->setTemplate('searchResults.ejs', [
-			'results' => $results,
+			'results' => $newResults,
 			'chips' => $chips
 		]);
 	}
