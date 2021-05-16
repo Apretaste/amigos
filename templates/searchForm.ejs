@@ -61,15 +61,14 @@
                 'ISLA_DE_LA_JUVENTUD': 'Isla de la Juventud'
         }; %>
 
-        <!-- PROVINCE-->
-        <div class="input-field province-div col s12 m6">
-            <select id="province" name="province" class="validate">
+        <!-- gender -->
+        <div class="input-field col s12 m6">
+            <select id="gender" name="gender" class="materialize-select">
                 <option value=""></option>
-                <% Object.keys(provinces).forEach(function(key){ %>
-                    <option value="<%= key %>"><%= provinces[key] %></option>
-                <% }) %>
+                <option value="M">Masculino</option>
+                <option value="F">Femenino</option>
             </select>
-            <label for="province">Provincia</label>
+            <label for="gender">G&eacute;nero</label>
         </div>
 
         <%
@@ -84,6 +83,17 @@
                 <% }) %>
             </select>
             <label for="sexual_orientation">Orientación Sexual</label>
+        </div>
+
+        <!-- PROVINCE-->
+        <div class="input-field province-div col s12 m6">
+            <select id="province" name="province" class="validate">
+                <option value=""></option>
+                <% Object.keys(provinces).forEach(function(key){ %>
+                    <option value="<%= key %>"><%= provinces[key] %></option>
+                <% }) %>
+            </select>
+            <label for="province">Provincia</label>
         </div>
 
         <%
@@ -113,17 +123,7 @@
             <label for="religion">Religión</label>
         </div>
 
-        <!-- gender -->
-        <div class="input-field col s12 m6">
-            <div class="input-field">
-                <select id="gender" name="gender" class="materialize-select">
-                    <option value=""></option>
-                    <option value="M">Masculino</option>
-                    <option value="F">Femenino</option>
-                </select>
-                <label for="gender">G&eacute;nero</label>
-            </div>
-        </div>
+
     </div>
 
     <div class="bottom-space"></div>
