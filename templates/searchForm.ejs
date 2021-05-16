@@ -74,7 +74,7 @@
             <div class="input-field province-div col s12 m6">
                 <select id="province" name="province" class="validate">
                     <option value=""></option>
-                    <% Object.keys(province).forEach(function(key){ %>
+                    <% Object.keys(provinces).forEach(function(key){ %>
                         <option value="<%= key %>"><%= province[key] %></option>
                     <% }) %>
                 </select>
@@ -96,7 +96,7 @@
             </div>
 
             <%
-            var religion = {
+            var religions = {
                 'ATEISMO': 'Ateísmo',
                 'SECULARISMO': 'Secularismo',
                 'AGNOSTICISMO': 'Agnosticismo',
@@ -115,8 +115,8 @@
             <div class="input-field col s12 m6">
                 <select id="religion" name="religion" class="validate">
                     <option value=""></option>
-                    <% Object.keys(religion).forEach(function(key) { %>
-                        <option value="<%= key %>"><%= religion[key] %></option>
+                    <% Object.keys(religions).forEach(function(key) { %>
+                        <option value="<%= key %>"><%= religions[key] %></option>
                     <% }) %>
                 </select>
                 <label for="religion">Religión</label>
