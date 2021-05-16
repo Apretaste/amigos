@@ -305,7 +305,8 @@ class Service
 				'fullName' => $person->fullName,
 				'avatar' => $person->avatar,
 				'avatarColor' => $person->avatarColor,
-				'experience' => $person->experience
+				'experience' => $person->experience,
+				'friend' => (int) $item->friend == 1
 			];
 		}
 

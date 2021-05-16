@@ -23,6 +23,13 @@
                 <span>
                     <%= item.fullName %>
                 </span>
+                <span class="float-right">
+                    <a href="#!">
+                        <i class="fa fa-user-plus green-text"
+                           onclick="acceptModalOpen('<%= item.id %>', '<%= item.username %>')">
+                        </i>
+                    </a>
+                </span>
             </li>
             <% } %>
         </ul>
@@ -37,4 +44,15 @@
        onclick="apretaste.send({command: 'AMIGOS BUSQUEDA', data: {}});">
         <i class="material-icons">person_add</i>
     </a>
+</div>
+
+
+<div id="addFriendModal" class="modal">
+    <div class="modal-content">
+        <p>¿Agregar a <b class="username">@username</b> a sus amigos?</p>
+    </div>
+    <div class="modal-footer">
+        <a href="#!" class="modal-close waves-effect waves-light btn-flat">Cancelar</a>
+        <a onclick="addFriend('Solicitud enviada')" class="waves-effect waves-green btn-flat green-text modal-close">Agregar</a>
+    </div>
 </div>
