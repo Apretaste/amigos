@@ -1,5 +1,8 @@
 <div class="row" style="margin-top: 10px">
     <div class="col s12">
+        <% for(var j in chips) { %>
+            <span class="chip small tiny"><%= chips[j] %></span>
+        <% } %>
         <ul class="collection one-line">
             <% for(var i in results) { var item = results[i]; %>
             <li class="collection-item avatar">
@@ -17,7 +20,7 @@
                         <a class="<%= item.gender || 'black-text' %>" href="#!" onclick="apretaste.send({command: 'PERFIL', data:{username: '<%= item.username %>'}});">@<%= item.username %></a>
                     </span>
                 </p>
-                <span class="chip tiny clear spacing">
+                <span>
                     <%= item.fullName %>
                 </span>
             </li>

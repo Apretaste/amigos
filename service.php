@@ -257,16 +257,6 @@ class Service
 		$sexual_orientation = Database::escape($request->input->data->sexual_orientation ?? '');
 		$religion = Database::escape($request->input->data->religion ?? '');
 
-		$where .= (empty($username) ? '' : " AND username like '%$username%' ");
-		$where .= (empty($email) ? '' : " AND email like '%$email%' ");
-		$where .= (empty($cellphone) ? '' : " AND cellphone like '%$cellphone%' ");
-		$where .= (empty($gender) ? '' : " AND gender = '$gender' ");
-		$where .= (empty($province) ? '' : " AND province = '$province' ");
-		$where .= (empty($sexual_orientation) ? '' : " AND sexual_orientation = '$sexual_orientation' ");
-		$where .= (empty($religion) ? '' : " AND religion = '$religion' ");
-		$where .= (empty($ageFrom) ? '' : " AND year_of_birth IS NULL OR IFNULL(YEAR(NOW())-year_of_birth,0) >= $ageFrom ");
-		$where .= (empty($ageTo) ? '' : " AND year_of_birth IS NULL OR IFNULL(YEAR(NOW())-year_of_birth,0) <= $ageTo ");
-
 		$chips = [$username, $email, $cellphone, $gender, $province, $sexual_orientation, $religion];
 		if (!empty($ageFrom)) $chips[] = 'de '.$ageFrom.' a '.$ageTo;
 
@@ -275,15 +265,36 @@ class Service
 			return true;
 		});
 
-		$results = Database::query("SELECT person.id, B.user1 IS NOT NULL as friend FROM person 
-    								LEFT JOIN person_relation_friend B 
-    								    ON (person.id = B.user1 AND B.user2 = {$request->person->id}) 
-    								           OR  (person.id = B.user2 AND B.user1 = {$request->person->id})
-									LEFT JOIN person_relation_blocked K 
-    								    ON (person.id = K.user1 AND K.user2 = {$request->person->id}) 
+		$results = Database::query("SELECT 
+										person.id, 
+										IF(person.username like '%$username%', 1, 0) AS match_username,
+										IF(email like '%$email%', 1 ,0) AS match_email,
+										IF(cellphone like '%$cellphone%', 1, 0) AS match_cellphone,
+										IF(gender = '$gender', 1, 0) AS match_gender,
+										IF(province = '$province', 1, 0) AS match_province,
+										IF(sexual_orientation = '$sexual_orientation', 1, 0) AS match_sexual,
+										IF(religion = '$religion', 1,0) AS match_religion,
+										IF(year_of_birth IS NULL OR IFNULL(YEAR(NOW())-year_of_birth,0) >= $ageFrom, 1, 0) AS match_age_from,
+										IF(year_of_birth IS NULL OR IFNULL(YEAR(NOW())-year_of_birth,0) <= $ageTo, 1, 0) AS match_age_to,
+										B.user1 IS NOT NULL as friend 
+									FROM person 
+    								LEFT JOIN person_relation_friend B ON (person.id = B.user1 AND B.user2 = {$request->person->id}) 
+    								           OR (person.id = B.user2 AND B.user1 = {$request->person->id})
+									LEFT JOIN person_relation_blocked K ON (person.id = K.user1 AND K.user2 = {$request->person->id}) 
     								           OR  (person.id = K.user2 AND K.user1 = {$request->person->id})
-									WHERE K.user1 IS NULL $where 
-									LIMIT $limit OFFSET $offset");
+									WHERE K.user1 IS NULL "
+									. (empty($username) ? '' : " AND match_username = 1 ")
+									. (empty($email) ? '' : " AND match_email = 1 ")
+									. (empty($cellphone) ? '' : " AND match_cellphone = 1")
+									. (empty($gender) ? '' : " AND match_gender = 1 ")
+									. (empty($sexual_orientation) ? '' : " AND match_sexual = 1 ")
+									. (empty($province) ? '' : " AND match_province = 1 ")
+									. (empty($religion) ? '' : " AND match_religion = 1 ")
+									. (empty($ageFrom) ? '' : " AND match_age_from = 1 ")
+									. (empty($ageTo) ? '' : " AND match_age_to = 1 ")
+									. " LIMIT $limit OFFSET $offset 
+									ORDER BY match_username + match_email + match_cellphone + match_gender 
+										+ match_sexual + match_province + match_religion + match_age_from + match_age_to DESC");
 
 		$newResults = [];
 		foreach ($results as $item) {
