@@ -292,9 +292,9 @@ class Service
 									. (empty($religion) ? '' : " AND match_religion = 1 ")
 									. (empty($ageFrom) ? '' : " AND match_age_from = 1 ")
 									. (empty($ageTo) ? '' : " AND match_age_to = 1 ")
-									. " LIMIT $limit OFFSET $offset 
-									ORDER BY match_username + match_email + match_cellphone + match_gender 
-										+ match_sexual + match_province + match_religion + match_age_from + match_age_to DESC");
+									. " ORDER BY match_username + match_email + match_cellphone + match_gender 
+										+ match_sexual + match_province + match_religion + match_age_from + match_age_to DESC 
+									LIMIT $offset, $limit ");
 
 		$newResults = [];
 		foreach ($results as $item) {
