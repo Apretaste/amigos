@@ -275,13 +275,22 @@ class Service
 			return true;
 		});
 
-		$results = Database::query("SELECT id FROM person WHERE TRUE $where LIMIT $limit OFFSET $offset");
+		$results = Database::query("SELECT person.id, B.user1 IS NOT NULL as friend FROM person 
+    								LEFT JOIN person_relation_friend B 
+    								    ON (person.id = B.user1 AND B.user2 = {$request->person->id}) 
+    								           OR  (person.id = B.user2 AND B.user1 = {$request->person->id})
+									LEFT JOIN person_relation_blocked K 
+    								    ON (person.id = K.user1 AND K.user2 = {$request->person->id}) 
+    								           OR  (person.id = K.user2 AND K.user1 = {$request->person->id})
+									WHERE K.user1 IS NULL $where 
+									LIMIT $limit OFFSET $offset");
 
 		$newResults = [];
 		foreach ($results as $item) {
 			$person = Person::find($item->id);
 			$newResults[] = (object) [
 				'id' => $person->id,
+				'username' => $person->username,
 				'fullName' => $person->fullName,
 				'avatar' => $person->avatar,
 				'avatarColor' => $person->avatarColor,
