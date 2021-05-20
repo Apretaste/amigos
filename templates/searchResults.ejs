@@ -13,25 +13,18 @@
                         <% } %>
                      face="<%= item.avatar %>"
                      color="<%= item.avatarColor %>"
-                     size="30" online="<%= item.online %>">
+                     online="<%= item.online %>">
                 </div>
-                <p>
-                    <span class="title">
-                        <a class="<%= item.gender || 'black-text' %>" href="#!" onclick="apretaste.send({command: 'PERFIL', data:{username: '<%= item.username %>'}});">@<%= item.username %></a>
-                    </span>
-                    <% if(!item.friend) { %>
-                        <span class="right float-right">
-                        <a href="#!">
-                            <i class="fa fa-user-plus green-text"
-                               onclick="addFriendModalOpen('<%= item.id %>', '<%= item.username %>')">
-                            </i>
-                        </a>
-                    </span>
-                    <% } %>
-                </p>
-                <span>
-                    <%= item.fullName %>
+
+                <span class="title">
+                    <a class="<%= item.gender || 'black-text' %>" href="#!" onclick="apretaste.send({command: 'PERFIL', data:{username: '<%= item.username %>'}});">@<%= item.username %></a>
                 </span>
+                <p>
+                    <%= item.fullName %>
+                </p>
+                <% if(!item.friend) { %>
+                    <a href="#!" class="secondary-content green-text first" onclick="addFriendModalOpen('<%= item.id %>', '<%= item.username %>')">><i class="material-icons">person_add</i></a>
+                <% } %>
             </li>
             <% } %>
         </ul>
