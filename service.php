@@ -339,7 +339,6 @@ class Service
 			];
 		}
 
-
 		$response->setTemplate('searchResults.ejs', [
 			'results' => $newResults,
 			'chips' => $chips
