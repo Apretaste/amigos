@@ -23,7 +23,10 @@
                     <%= item.fullName %>
                 </p>
                 <% if(!item.friend) { %>
-                    <a href="#!" class="secondary-content green-text first" onclick="addFriendModalOpen('<%= item.id %>', '<%= item.username %>')">><i class="material-icons">person_add</i></a>
+                    <a href="#!" class="secondary-content green-text first"
+                       onclick="addFriendModalOpen('<%= item.id %>', '<%= item.username %>')">
+                        <i class="material-icons">person_add</i>
+                    </a>
                 <% } %>
             </li>
             <% } %>
