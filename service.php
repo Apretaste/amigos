@@ -221,6 +221,7 @@ class Service
 	 * @throws \Apretaste\Alert
 	 */
 	public function _busqueda(Request $request, Response $response) {
+		$response->setCache('year');
 		$response->setTemplate('searchForm.ejs', [
 			'username' => '',
 			'email' => '',
@@ -268,7 +269,7 @@ class Service
 		});
 
 		$results = Database::query("SELECT * FROM (SELECT 
-										person.id, person.active, person.online, person.last_access,
+										person.id, person.active, person.online, person.last_access, person.gender,
 										IF(person.username like '%$username%', 1, 0) AS match_username,
                       					IF('$fullname' like concat(concat('%',first_name),'%')
                       					    OR '$fullname' like concat(concat('%',last_name),'%'), 1, 0) as match_fullname,
@@ -314,7 +315,8 @@ class Service
 				'avatar' => $person->avatar,
 				'avatarColor' => $person->avatarColor,
 				'experience' => $person->experience,
-				'friend' => (int) $item->friend == 1
+				'friend' => (int) $item->friend == 1,
+				'gender' => $person->gender
 			];
 		}
 
@@ -396,8 +398,6 @@ class Service
 	}
 
 	/**
-	 *
-	 *
 	 * @param Request $request
 	 * @param Response $response
 	 * @throws Alert
