@@ -410,7 +410,21 @@ function cleanUpSpecialChars(str) {
 }
 
 function openProfile(id) {
-	apretaste.send({command: 'perfil', data: {username: id}});
+	apretaste.send({
+		command: 'PERFIL',
+		data: {
+			username: id
+		}
+	});
+}
+
+function openChat(id) {
+	apretaste.send({
+		command: 'CHAT',
+		data: {
+			userId: id
+		}
+	});
 }
 
 function showToast(text) {

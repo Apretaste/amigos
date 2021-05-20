@@ -22,10 +22,21 @@
                 <p>
                     <%= item.fullName %>
                 </p>
-                <% if(!item.friend) { %>
-                    <a href="#!" class="secondary-content green-text first"
-                       onclick="addFriendModalOpen('<%= item.id %>', '<%= item.username %>')">
+                <% if(!item.friend && !item.waiting) { %>
+                    <a href="#!" class="secondary-content green-text first" onclick="addFriendModalOpen('<%= item.id %>', '<%= item.username %>')">
                         <i class="material-icons">person_add</i>
+                    </a>
+                <% } %>
+
+                <% if(!item.friend && item.waiting) { %>
+                    <a href="#!" class="secondary-content green-text first" onclick="openProfile(<%= item.id %>)">
+                        <i class="fas fa-user"></i>
+                    </a>
+                <% } %>
+
+                <% if(item.friend) { %>
+                    <a href="#!" class="secondary-content green-text first" onclick="openChat(<%= item.id %>);">
+                        <i class="fas fa-comments"></i>
                     </a>
                 <% } %>
             </li>
@@ -42,14 +53,9 @@
 
 <!-- SEARCH -->
 <div class="fixed-action-btn">
-    <a class="btn-floating grey second" href="#!"
-       onclick="apretaste.send({command: 'AMIGOS', data: {}});">
-        <i class="material-icons">arrow_back</i>
-    </a>
-
     <a class="btn-floating btn-large waves-effect waves-light green" href="#!"
        onclick="apretaste.send({command: 'AMIGOS BUSQUEDA', data: {}});">
-        <i class="material-icons">search</i>
+        <i class="material-icons">arrow_back</i>
     </a>
 </div>
 

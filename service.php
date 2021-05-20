@@ -1,6 +1,7 @@
 <?php
 
 use Apretaste\Config;
+use Apretaste\Core;
 use Apretaste\Email;
 use Apretaste\Person;
 use Apretaste\Request;
@@ -260,8 +261,12 @@ class Service
 		$sexual_orientation = Database::escape($request->input->data->sexual_orientation ?? '');
 		$religion = Database::escape($request->input->data->religion ?? '');
 
-		$chips = [$username, $email, $cellphone, $gender, $province, $sexual_orientation, $religion];
-		if (!empty($ageFrom)) $chips[] = 'de '.$ageFrom.' a '.$ageTo;
+		$chips = [$username, $email, $cellphone,
+			Core::$gender[$gender] ?? '', $province,
+			Core::$sexualOrientation[$sexual_orientation] ?? '',
+			Core::$religions[$religion] ?? ''];
+
+		if (!empty($ageFrom)) $chips[] = $ageFrom.' a '.$ageTo. ' años';
 
 		$chips = array_filter($chips, function($value){
 			if (empty($value)) return false;
@@ -271,8 +276,10 @@ class Service
 		$results = Database::query("SELECT * FROM (SELECT 
 										person.id, person.active, person.online, person.last_access, person.gender,
 										IF(person.username like '%$username%', 1, 0) AS match_username,
-                      					IF('$fullname' like concat(concat('%',first_name),'%')
-                      					    OR '$fullname' like concat(concat('%',last_name),'%'), 1, 0) as match_fullname,
+                      					IF(
+										   ('$fullname' like concat(concat('%',coalesce(first_name,'')),'%') AND coalesce(first_name,'') <> '') 
+										OR ('$fullname' like concat(concat('%',coalesce(last_name, '')),'%') AND coalesce(last_name,'') <> '')
+                      					    , 1, 0) as match_fullname,
 										IF(email like '%$email%', 1 ,0) AS match_email,
 										IF(cellphone like '%$cellphone%', 1, 0) AS match_cellphone,
 										IF(gender = '$gender', 1, 0) AS match_gender,
@@ -282,7 +289,7 @@ class Service
 										IF(year_of_birth IS NULL OR IFNULL(YEAR(NOW())-year_of_birth,0) >= $ageFrom, 1, 0) AS match_age_from,
 										IF(year_of_birth IS NULL OR IFNULL(YEAR(NOW())-year_of_birth,0) <= $ageTo, 1, 0) AS match_age_to,
 										B.user1 IS NOT NULL as friend,
-                      					W.user1 IS NOT NULL as wating
+                      					W.user1 IS NOT NULL as waiting
 									FROM person 
     								LEFT JOIN person_relation_friend B ON (person.id = B.user1 AND B.user2 = {$request->person->id}) 
 										   OR (person.id = B.user2 AND B.user1 = {$request->person->id})
@@ -290,7 +297,7 @@ class Service
 										   OR (person.id = W.user2 AND W.user1 = {$request->person->id})
 									LEFT JOIN person_relation_blocked K ON (person.id = K.user1 AND K.user2 = {$request->person->id}) 
     								           OR  (person.id = K.user2 AND K.user1 = {$request->person->id})
-									WHERE K.user1 IS NULL) subq WHERE TRUE AND friend = 0 AND wating = 0 "
+									WHERE K.user1 IS NULL) subq WHERE TRUE "
 									. (empty($username) ? '' : " AND match_username = 1 ")
 									. (empty($fullname) ? '' : " AND match_fullname = 1 ")
 									. (empty($email) ? '' : " AND match_email = 1 ")
@@ -304,6 +311,18 @@ class Service
 									. " ORDER BY match_username + match_fullname + match_email + match_cellphone + match_gender 
 										+ match_sexual + match_province + match_religion + match_age_from + match_age_to DESC, active DESC, online DESC, last_access DESC  
 									LIMIT $offset, $limit ");
+
+		if (count($results) < 1) {
+			return $response->setTemplate('message.ejs',  [
+				"header" => 'Sin resultados',
+				"text" => "No se encontraron resultados para los criterios de búsqueda proporcionados",
+				'icon' => "sentiment_very_dissatisfied",
+				'btn' => [
+					'command' => 'AMIGOS BUSQUEDA',
+					'caption' => 'Buscar'
+				]
+			]);
+		}
 
 		$newResults = [];
 		foreach ($results as $item) {
@@ -319,6 +338,7 @@ class Service
 				'gender' => $person->gender
 			];
 		}
+
 
 		$response->setTemplate('searchResults.ejs', [
 			'results' => $newResults,
