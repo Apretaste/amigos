@@ -250,10 +250,10 @@ class Service
 		$limit  = 50;
 		$offset = 0;
 
-		$username = Database::escape($request->input->data->username ?? '');
-		$fullname = Database::escape($request->input->data->fullname ?? '');
-		$email = Database::escape($request->input->data->email ?? '');
-		$cellphone = Database::escape($request->input->data->cellphone ?? '');
+		$username = trim(Database::escape($request->input->data->username ?? ''));
+		$fullname = trim(Database::escape($request->input->data->fullname ?? ''));
+		$email = trim(Database::escape($request->input->data->email ?? ''));
+		$cellphone = trim(Database::escape($request->input->data->cellphone ?? ''));
 		$gender = Database::escape($request->input->data->gender ?? '');
 		$ageFrom = (int) Database::escape($request->input->data->ageFrom ?? '');
 		$ageTo = (int) Database::escape($request->input->data->ageTo ?? '');
@@ -261,7 +261,7 @@ class Service
 		$sexual_orientation = Database::escape($request->input->data->sexual_orientation ?? '');
 		$religion = Database::escape($request->input->data->religion ?? '');
 
-		$chips = [$username, $email, $cellphone,
+		$chips = [$username, $email, $cellphone, $fullname,
 			Core::$gender[$gender] ?? '', $province,
 			Core::$sexualOrientation[$sexual_orientation] ?? '',
 			Core::$religions[$religion] ?? ''];
