@@ -85,7 +85,11 @@ function searchFormValidator(data) {
 		&& $("#gender").val().length === 0
 		&& $("#sexual_orientation").val().length === 0
 		&& $("#province").val().length === 0
-		&& $("#religion").val().length === 0) return false;
+		&& $("#religion").val().length === 0) {
+			showToast('Debe especificar algun dato para buscar');
+			return false;
+		}
+
 	return true;
 }
 
