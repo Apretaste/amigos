@@ -250,7 +250,7 @@ class Service
 		$limit  = 50;
 		$offset = 0;
 
-		$username = trim(Database::escape($request->input->data->username ?? ''));
+		$username = str_replace('@','',trim(Database::escape($request->input->data->username ?? '')));
 		$fullname = trim(Database::escape($request->input->data->fullname ?? ''));
 		$email = trim(Database::escape($request->input->data->email ?? ''));
 		$cellphone = trim(Database::escape($request->input->data->cellphone ?? ''));
