@@ -86,7 +86,7 @@ function searchFormValidator(data) {
 		&& $("#sexual_orientation").val().length === 0
 		&& $("#province").val().length === 0
 		&& $("#religion").val().length === 0) {
-			showToast('Debe especificar algun dato para buscar');
+			showToast('Debe especificar alg&uacute;n dato para buscar');
 			return false;
 		}
 
