@@ -299,16 +299,16 @@ class Service
 
 		$results = Database::query("SELECT * FROM (SELECT 
 										person.id, person.active, person.online, person.last_access, person.gender,
-										IF(person.username like '%$username%', 1, 0) AS match_username,
+										". (empty($username) ? '' : "IF(person.username like '%$username%', 1, 0) AS match_username,")."
                       					".($i < 1 ? "": $wordsSQL.",")."
-										IF(email like '%$email%', 1 ,0) AS match_email,
-										IF(cellphone like '%$cellphone%', 1, 0) AS match_cellphone,
-										IF(gender = '$gender', 1, 0) AS match_gender,
-										IF(province = '$province', 1, 0) AS match_province,
-										IF(sexual_orientation = '$sexual_orientation', 1, 0) AS match_sexual,
-										IF(religion = '$religion', 1,0) AS match_religion,
-										IF(year_of_birth IS NULL OR IFNULL(YEAR(NOW())-year_of_birth,0) >= $ageFrom, 1, 0) AS match_age_from,
-										IF(year_of_birth IS NULL OR IFNULL(YEAR(NOW())-year_of_birth,0) <= $ageTo, 1, 0) AS match_age_to,
+										". (empty($email) ? '' : "IF(email = '$email', 1 ,0) AS match_email,")."
+										". (empty($cellphone) ? '' : "IF(cellphone = '$cellphone', 1, 0) AS match_cellphone,")."
+										". (empty($gender) ? '' : "IF(gender = '$gender', 1, 0) AS match_gender,")."
+										". (empty($province) ? '' : "IF(province = '$province', 1, 0) AS match_province,")."
+										". (empty($sexual_orientation) ? '' : "IF(sexual_orientation = '$sexual_orientation', 1, 0) AS match_sexual,")."
+										". (empty($religion) ? '' : "IF(religion = '$religion', 1,0) AS match_religion,")."
+										". (empty($ageFrom) ? '' : "IF(year_of_birth IS NULL OR IFNULL(YEAR(NOW())-year_of_birth,0) >= $ageFrom, 1, 0) AS match_age_from,")."
+										". (empty($ageTo) ? '' : "IF(year_of_birth IS NULL OR IFNULL(YEAR(NOW())-year_of_birth,0) <= $ageTo, 1, 0) AS match_age_to,")."
 										B.user1 IS NOT NULL as friend,
                       					W.user1 IS NOT NULL as waiting
 									FROM person 
