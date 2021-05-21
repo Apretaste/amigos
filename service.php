@@ -299,16 +299,16 @@ class Service
 
 		$results = Database::query("SELECT * FROM (SELECT 
 										person.id, person.active, person.online, person.last_access, person.gender,
-										". (empty($username) ? '' : "IF(person.username like '%$username%', 1, 0) AS match_username,")."
+										". (empty($username) ? '0 as match_username' : "IF(person.username like '%$username%', 1, 0) AS match_username,")."
                       					".($i < 1 ? "": $wordsSQL.",")."
-										". (empty($email) ? '' : "IF(email = '$email', 1 ,0) AS match_email,")."
-										". (empty($cellphone) ? '' : "IF(cellphone = '$cellphone', 1, 0) AS match_cellphone,")."
-										". (empty($gender) ? '' : "IF(gender = '$gender', 1, 0) AS match_gender,")."
-										". (empty($province) ? '' : "IF(province = '$province', 1, 0) AS match_province,")."
-										". (empty($sexual_orientation) ? '' : "IF(sexual_orientation = '$sexual_orientation', 1, 0) AS match_sexual,")."
-										". (empty($religion) ? '' : "IF(religion = '$religion', 1,0) AS match_religion,")."
-										". (empty($ageFrom) ? '' : "IF(year_of_birth IS NULL OR IFNULL(YEAR(NOW())-year_of_birth,0) >= $ageFrom, 1, 0) AS match_age_from,")."
-										". (empty($ageTo) ? '' : "IF(year_of_birth IS NULL OR IFNULL(YEAR(NOW())-year_of_birth,0) <= $ageTo, 1, 0) AS match_age_to,")."
+										". (empty($email) ? '0 as match_email' : "IF(email = '$email', 1 ,0) AS match_email,")."
+										". (empty($cellphone) ? '0 as match_cellphone' : "IF(cellphone = '$cellphone', 1, 0) AS match_cellphone,")."
+										". (empty($gender) ? '0 as match_gender' : "IF(gender = '$gender', 1, 0) AS match_gender,")."
+										". (empty($province) ? '0 as match_province' : "IF(province = '$province', 1, 0) AS match_province,")."
+										". (empty($sexual_orientation) ? '0 as match_sexual' : "IF(sexual_orientation = '$sexual_orientation', 1, 0) AS match_sexual,")."
+										". (empty($religion) ? '0 as match_religion' : "IF(religion = '$religion', 1,0) AS match_religion,")."
+										". (empty($ageFrom) ? '0 as match_age_from' : "IF(year_of_birth IS NULL OR IFNULL(YEAR(NOW())-year_of_birth,0) >= $ageFrom, 1, 0) AS match_age_from,")."
+										". (empty($ageTo) ? '0 as match_age_to' : "IF(year_of_birth IS NULL OR IFNULL(YEAR(NOW())-year_of_birth,0) <= $ageTo, 1, 0) AS match_age_to,")."
 										B.user1 IS NOT NULL as friend,
                       					W.user1 IS NOT NULL as waiting
 									FROM person 
