@@ -78,6 +78,14 @@ $(document).ready(function() {
 
 
 function searchFormValidator(data) {
+	if ($("#username").val().length === 0
+		&& $("#fullname").val().length === 0
+		&& $("#email").val().length === 0
+		&& $("#cellphone").val().length === 0
+		&& $("#gender").val().length === 0
+		&& $("#sexual_orientation").val().length === 0
+		&& $("#province").val().length === 0
+		&& $("#religion").val().length === 0) return false;
 	return true;
 }
 
