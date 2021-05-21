@@ -284,7 +284,7 @@ class Service
 		$xwords = [];
 		foreach($words as $word) {
 			$i++;
-			$xwords[] = " concat(concat(first_name,' '), last_name) LIKE '%$word%' ) as w$i ";
+			$xwords[] = " concat(concat(first_name,' '), last_name) LIKE '%$word%' as w$i ";
 		}
 
 		$wordsSQL = implode(', ', $xwords);
