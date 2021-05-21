@@ -270,7 +270,7 @@ class Service
 
 		if ($ageFrom>0 && $ageTo>0) $chips[] = $ageFrom.' a '.$ageTo. ' años';
 		elseif($ageFrom==0 && $ageTo>0) $chips[] = ' menores de '.$ageTo. ' años';
-		elseif($ageFrom > 0 && $ageTo==0) $chips[] = ' mayores de '.$ageTo. ' años';
+		elseif($ageFrom > 0 && $ageTo==0) $chips[] = ' mayores de '.$ageFrom. ' años';
 
 		$chips = array_filter($chips, function($value){
 			if (empty($value)) return false;
