@@ -281,11 +281,13 @@ class Service
 
 		$words = explode(' ', $fullname);
 		$i = 0;
-		$wordsSQL = array_map(function($word) use(&$i) {
+		$xwords = [];
+		foreach($words as $word) {
 			$i++;
-			return "(concat(concat(first_name,' '), last_name) LIKE '%$word%' AND coalesce(first_name,'') <> '') as w$i";
-		}, $words);
-		$wordsSQL = implode(', ', $wordsSQL);
+			$xwords[] = "(concat(concat(first_name,' '), last_name) LIKE '%$word%' AND coalesce(first_name,'') <> '') as w$i";
+		}
+
+		$wordsSQL = implode(', ', $xwords);
 
 		$wordsSum = '0';
 		for($j=1; $j<=$i; $j++) $wordsSum .= "+w$j";
