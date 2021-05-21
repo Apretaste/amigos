@@ -285,7 +285,7 @@ class Service
 		$t = count($words);
 		foreach($words as $word) {
 			$i++;
-			$xwords[] = " IF(concat(concat(first_name,' '), last_name) LIKE '%$word%', ".($t + 1 - $i).",0)  as w$i ";
+			$xwords[] = " IF(concat(first_name,' ', middle_name, ' ',last_name,' ',mother_name) LIKE '%$word%', ".($t + 1 - $i).",0)  as w$i ";
 		}
 
 		$wordsSQL = implode(', ', $xwords);
