@@ -250,7 +250,7 @@ class Service
 		$limit  = 50;
 		$offset = 0;
 
-		$username = str_replace('@','',trim(Database::escape($request->input->data->username ?? '')));
+		$username = trim(Database::escape($request->input->data->username ?? ''));
 		$fullname = trim(Database::escape($request->input->data->fullname ?? ''));
 		$email = trim(Database::escape($request->input->data->email ?? ''));
 		$cellphone = trim(Database::escape($request->input->data->cellphone ?? ''));
@@ -265,6 +265,8 @@ class Service
 			Core::$gender[$gender] ?? '', $province,
 			Core::$sexualOrientation[$sexual_orientation] ?? '',
 			Core::$religions[$religion] ?? ''];
+
+		$username = str_replace('@','', $username);
 
 		if (!empty($ageFrom)) $chips[] = $ageFrom.' a '.$ageTo. ' años';
 
@@ -354,7 +356,8 @@ class Service
 				'avatarColor' => $person->avatarColor,
 				'experience' => $person->experience,
 				'friend' => (int) $item->friend == 1,
-				'gender' => $person->gender
+				'gender' => $person->gender,
+				'is_influencer' => $person->isInfluencer
 			];
 		}
 

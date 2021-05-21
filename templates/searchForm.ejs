@@ -31,7 +31,7 @@
         <!-- AGE RANGE -->
         <div class="input-field col s6">
             <select id="ageFrom" name = "ageFrom">
-                <option value="0"></option>
+                <option value=""></option>
                 <% for(var i=16; i<=120;i++) { %>
                     <option value="<%= i %>" <% if (ageFrom === i) {%> selected <% } %>><%= i %></option>
                 <% } %>
@@ -40,7 +40,7 @@
         </div>
         <div class="input-field col s6">
             <select id="ageTo" name ="ageTo">
-                <option value="120"></option>
+                <option value=""></option>
                 <% for(var i=16; i<=120;i++) { %>
                     <option value="<%= i %>" <% if (ageTo === i) {%> selected <% } %>><%= i %></option>
                 <% } %>
