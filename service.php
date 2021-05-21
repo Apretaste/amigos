@@ -273,13 +273,27 @@ class Service
 			return true;
 		});
 
+		$fullname = strtolower(trim($fullname));
+
+		while(strpos($fullname,'  ')!==false) {
+			$fullname = str_replace('  ',' ', $fullname);
+		}
+
+		$words = explode(' ', $fullname);
+		$i = 0;
+		$wordsSQL = array_map(function($word) use(&$i) {
+			$i++;
+			return "(concat(concat(first_name,' '), last_name) LIKE '%$word%' AND coalesce(first_name,'') <> '') as w$i";
+		}, $words);
+		$wordsSQL = implode(', ', $wordsSQL);
+
+		$wordsSum = '0';
+		for($j=1; $j<=$i; $j++) $wordsSum .= "+w$j";
+
 		$results = Database::query("SELECT * FROM (SELECT 
 										person.id, person.active, person.online, person.last_access, person.gender,
 										IF(person.username like '%$username%', 1, 0) AS match_username,
-                      					IF(
-										   ('$fullname' like concat(concat('%',coalesce(first_name,'')),'%') AND coalesce(first_name,'') <> '') 
-										OR ('$fullname' like concat(concat('%',coalesce(last_name, '')),'%') AND coalesce(last_name,'') <> '')
-                      					    , 1, 0) as match_fullname,
+                      					".($i < 1 ? "": $wordsSQL.",")."
 										IF(email like '%$email%', 1 ,0) AS match_email,
 										IF(cellphone like '%$cellphone%', 1, 0) AS match_cellphone,
 										IF(gender = '$gender', 1, 0) AS match_gender,
@@ -299,7 +313,7 @@ class Service
     								           OR  (person.id = K.user2 AND K.user1 = {$request->person->id})
 									WHERE K.user1 IS NULL) subq WHERE TRUE "
 									. (empty($username) ? '' : " AND match_username = 1 ")
-									. (empty($fullname) ? '' : " AND match_fullname = 1 ")
+									. (empty($fullname) ? '' : " AND ($wordsSum) > 0 ")
 									. (empty($email) ? '' : " AND match_email = 1 ")
 									. (empty($cellphone) ? '' : " AND match_cellphone = 1")
 									. (empty($gender) ? '' : " AND match_gender = 1 ")
@@ -308,8 +322,10 @@ class Service
 									. (empty($religion) ? '' : " AND match_religion = 1 ")
 									. (empty($ageFrom) ? '' : " AND match_age_from = 1 ")
 									. (empty($ageTo) ? '' : " AND match_age_to = 1 ")
-									. " ORDER BY match_username + match_fullname + match_email + match_cellphone + match_gender 
-										+ match_sexual + match_province + match_religion + match_age_from + match_age_to DESC, active DESC, online DESC, last_access DESC  
+									. " ORDER BY match_username + match_email + match_cellphone + match_gender 
+										+ match_sexual + match_province + match_religion + match_age_from + match_age_to 
+										+ $wordsSum
+										DESC, active DESC, online DESC, last_access DESC  
 									LIMIT $offset, $limit ");
 
 		if (count($results) < 1) {
