@@ -373,3 +373,7 @@ ul.chat li {
 .collection-item.avatar {
     min-height: 60px !important;
 }
+
+.collection-item .avatar .secondary-content .fas {
+    font-size: 24px !important;
+}
