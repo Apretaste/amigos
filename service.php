@@ -299,7 +299,7 @@ class Service
 
 		$results = Database::query("SELECT * FROM (SELECT 
 										person.id, person.active, person.online, person.last_access, person.gender,
-										". (empty($username) ? '0 as match_username,' : "IF(person.username like '%$username%', 1, 0) AS match_username,")."
+										". (empty($username) ? '0 as match_username,' : "IF(person.username ='$username', 1, 0) AS match_username,")."
                       					".($i < 1 ? "": $wordsSQL.",")."
 										". (empty($email) ? '0 as match_email,' : "IF(email = '$email', 1 ,0) AS match_email,")."
 										". (empty($cellphone) ? '0 as match_cellphone,' : "IF(cellphone = '$cellphone', 1, 0) AS match_cellphone,")."
